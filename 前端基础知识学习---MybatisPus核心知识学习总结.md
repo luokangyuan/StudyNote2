@@ -27,7 +27,7 @@ Mybatis-Plus（简称MP）是一个 `Mybatis 的增强工具`，在 Mybatis 的�
 
 # 二、集成MybatisPlus
 
-集成使用Mybatis，哎西吧，那就这样吧，明天要加班，今天加班完了，明天早起学习吧
+
 
 # 三、入门的Hello World
 
