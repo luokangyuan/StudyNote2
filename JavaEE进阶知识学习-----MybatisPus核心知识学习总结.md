@@ -379,9 +379,11 @@ public void delete(){
 
 在前面，我们实现了基本的CRUD操作，操作简单，仅仅只需继承一个BaseMapper就可以完成，实现单一，批量，分页等等一系列操作，很大的减少了开发负担，但这仅仅是Mybatisplus的冰山一角，当我们需要多条件查询的时候，就会使用到MybatisPlus中强大的条件构造器EntityWrapper；
 
-
-
 # 四、条件查询
+
+条件构造器就是EntityWrapper，就是一个封装查询条件对象，让开发者自由的定义查询条件，主要用于sql的拼接，排序或者实体参数等；[条件构造器](http://mp.baomidou.com/#/wrapper)
+
+> 注意：使用的参数是数据库字段名称，不是Java类属性名
 
 
 
