@@ -385,6 +385,22 @@ public void delete(){
 
 > 注意：使用的参数是数据库字段名称，不是Java类属性名
 
+## 4.1.selectPage中的条件查询
+
+```java
+@Test
+public void entityWrapperTedst(){
+    // 分页查询第一页，每页2条记录，年龄在41-53之间，genger为1，user_name为王五的用户
+    List<User> users = userMapper.selectPage(new Page<User>(1, 2),
+                                             new EntityWrapper<User>()
+                                             .between("age", 41, 53)
+                                             .eq("gender",1)
+                                             .eq("user_name","王五")
+                                            );
+    System.out.print(users);
+}
+```
+
 
 
 # 五、活动记录
