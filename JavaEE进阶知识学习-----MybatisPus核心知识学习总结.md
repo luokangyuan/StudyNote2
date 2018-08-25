@@ -99,50 +99,49 @@ public class User {
 
 ```xml
 <dependencies>
-  <!-- 加入mybatisPlus依赖 -->
-	<dependency>
-	  <groupId>com.baomidou</groupId>
-	  <artifactId>mybatis-plus</artifactId>
-	  <version>3.0-gamma</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/junit/junit -->
-	<dependency>
-	    <groupId>junit</groupId>
-	    <artifactId>junit</artifactId>
-	    <version>4.11</version>
-	    <scope>test</scope>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/log4j/log4j -->
-	<dependency>
-	    <groupId>log4j</groupId>
-	    <artifactId>log4j</artifactId>
-	    <version>1.2.17</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
-	<dependency>
-	    <groupId>com.mchange</groupId>
-	    <artifactId>c3p0</artifactId>
-	    <version>0.9.5.2</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-	<dependency>
-	    <groupId>mysql</groupId>
-	    <artifactId>mysql-connector-java</artifactId>
-	    <version>6.0.6</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-context</artifactId>
-	    <version>4.3.18.RELEASE</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-orm</artifactId>
-	    <version>4.3.18.RELEASE</version>
-	</dependency>
-  </dependencies>
+    <!-- mp依赖:mybatisPlus 会自动的维护Mybatis 以及MyBatis-spring相关的依赖-->
+    <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus</artifactId>
+        <version>2.3</version>
+    </dependency>
+    <!--junit -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.9</version>
+    </dependency>
+    <!-- log4j -->
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+    </dependency>
+    <!-- c3p0 -->
+    <dependency>
+        <groupId>com.mchange</groupId>
+        <artifactId>c3p0</artifactId>
+        <version>0.9.5.2</version>
+    </dependency>
+    <!-- mysql -->
+    <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.11</version>
+    </dependency>
+    <!-- spring -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>4.3.10.RELEASE</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-orm</artifactId>
+        <version>4.3.10.RELEASE</version>
+    </dependency>
+</dependencies>
 ```
 
 ## 3.5.mybatis-config.xml文件
@@ -185,8 +184,8 @@ public class User {
 ## 3.7.db.properties文件
 
 ```properties
-jdbc.driver=com.mysql.jdbc.Driver 
-jdbc.url=jdbc:mysql://localhost:3306/mybatis
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/mybatis?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Hongkong
 jdbc.username=root
 jdbc.password=jiamei@20141107.
 ```
@@ -236,7 +235,149 @@ public interface UserMapper extends BaseMapper<User>{
 }
 ```
 
+然后，我们就写一些基本的单元测试方法，测试我们的CRUD，来到我们的测试类中，如下：
 
+```java
+public class TestMp {
+
+    private ApplicationContext ioc = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+    private UserMapper userMapper = ioc.getBean("userMapper",UserMapper.class);
+}
+```
+
+> 说明：在测试类中我们将使用从SpringIOC容器中获取的userMapper进行CRUD一系列操作
+
+`保存一条数据userMapper.insert(user);`
+
+```java
+@Test
+public void insert(){
+    User user = new User();
+    user.setUserName("luokangyuan");
+    user.setAge(66);
+    user.setEmail("2356775645@qq.com");
+    user.setGender(2);
+    Integer result = userMapper.insert(user);
+    System.out.println(result);
+    // 直接获取插入数据返回的自增主键值
+    System.out.println(user.getId()+"======");
+}
+```
+
+插入数据的方法有两个：`insert和insertAllColumn`，二者的执行结果是一样的，区别在于，前者会根据实体类的每一个属性值进行一个非空校验，在插入的sql语句中不会出现实体类属性为空的字段；
+
+> 注意：在没有使用全局配置之前，我们需要指定实体类对应的数据库表和主键生成策略
+
+* 主键生成策略：`@TableId(type = IdType.AUTO,value = "id")`,value属性值当实体类字段名和数据库一致时可以不写，这里的value指的是数据库字段名称，type的类型有以下几种：
+  * IdType.AUTO：数据库ID自增
+  * IdType.INPUT：用户输入ID
+  * IdType.ID_WORKER：全局唯一ID，内容为空自动填充（默认配置）
+  * IdType.UUID：全局唯一ID，内容为空自动填充 
+* 实体对应表名注解：`@TableName(value = "tbl_user")`;指定当前实体类对应的数据库表
+* 数据库字段映射名称：`@TableField(value = "user_name")`,当禁止驼峰映射规则后可以使用
+* 忽略插入到表的字段：`@ableField(exist = false)`,如下，数据库没有money这个字段，如果不忽略，那么插入就会报错，找不到这个字段；
+
+```java
+@TableField(exist = false)
+private Double money;
+```
+
+`更新一条数据`
+
+```java
+@Test
+public void update(){
+    User user = new User();
+    user.setId(7);
+    user.setUserName("王八");
+    user.setAge(56);
+    //user.setEmail("2356775645@qq.com");
+    user.setGender(2);
+    Integer result = userMapper.updateById(user);
+}
+```
+
+同理：更新方法也有两个`updateById和updateAllColumnById`,前者会对实体类属性名进行非空校验，为空的就不会出现在sql语句中，也就是不会更新原有数据，后者是会更新所有列，如果实体类属性值为空，则数据库对应字段名更新为null；
+
+`查询一条数据`
+
+```java
+@Test
+public void select(){
+    // 1.通过ID查询一条数据
+    User user = userMapper.selectById(7);
+    // 2.通过多个列进行查询,如果查处的数据有多条就会报错
+    User u = new User();
+    u.setId(2);
+    u.setUserName("张三");
+    User user1 = userMapper.selectOne(u);
+    // 3.查询符合多个ID的数据,使用的是in关键字查询
+    List<Integer> ids = new ArrayList<Integer>();
+    ids.add(3);
+    ids.add(4);
+    ids.add(5);
+    List<User> users = userMapper.selectBatchIds(ids);
+    // 4.通过封装map条件,注意的是封装的是列字段名，不是实体里属性名，
+    // map中的key充当sql中的条件名称
+    Map<String,Object> maps = new HashMap<String, Object>();
+    maps.put("user_name","张三");
+    maps.put("age",347);
+    List<User> users1 = userMapper.selectByMap(maps);
+    // 5.分页查询方法,查看第二页，每页2条数据,在sql语句并没有limit关键字
+    // 所以要实现物理分页，还需借助插件，例如mybatis的pageHepler或者MybatisPlus提供的分页插件
+    List<User> users2 = userMapper.selectPage(new Page<User>(2, 2), null);
+}
+```
+
+`删除一条数据`
+
+```java
+@Test
+public void delete(){
+    // 1.根据ID删除
+    Integer integer = userMapper.deleteById(8);
+    // 2.根据条件删除，map中的key为列名，千万注意
+    Map<String ,Object> maps = new HashMap<String, Object>();
+    maps.put("age",66);
+    maps.put("gender",2);
+    Integer integer1 = userMapper.deleteByMap(maps);
+    // 3.根据ID批量删除,使用in关键字
+    List<Integer> ids = new ArrayList<Integer>();
+    ids.add(5);
+    ids.add(7);
+    Integer integer2 = userMapper.deleteBatchIds(ids);
+}
+```
+
+
+
+## 3.10.MybatisPlus全局配置
+
+在前面的CRUD操作中，我们会使用直接注解指定主键生成策略和表名到实体类的映射，但是配置的仅仅会对当前实体类起作用，所以，引入了全局配置，如下：
+
+```xml
+<!-- 定义MybatisPlus的全局策略配置-->
+<bean id ="globalConfiguration" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+    <!--映射数据库下划线字段名到数据库实体类的驼峰命名的映射-->
+    <property name="dbColumnUnderline" value="true"></property>
+    <!-- 全局的主键策略 -->
+    <property name="idType" value="0"></property>
+    <!-- 全局的表前缀策略配置 -->
+    <property name="tablePrefix" value="tbl_"></property>
+</bean>
+```
+
+然后，将MybatisPlus全局配置注入到sqlSessionFactoryBean中
+
+```xml
+<!-- 注入全局MP策略配置 -->
+<property name="globalConfig" ref="globalConfiguration"></property>
+```
+
+## 3.11.mybatisPlusCRUD总结
+
+在前面，我们实现了基本的CRUD操作，操作简单，仅仅只需继承一个BaseMapper就可以完成，实现单一，批量，分页等等一系列操作，很大的减少了开发负担，但这仅仅是Mybatisplus的冰山一角，当我们需要多条件查询的时候，就会使用到MybatisPlus中强大的条件构造器EntityWrapper；
 
 
 
