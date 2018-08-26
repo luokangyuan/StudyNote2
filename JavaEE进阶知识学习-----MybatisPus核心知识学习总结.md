@@ -714,7 +714,28 @@ public void testPage(){
 
 > 说明：我们可以将分页查询的数据放在page对象中，返回前端一个page对象即可
 
+## 7.2.执行分析插件
 
+```xml
+<bean class="com.baomidou.mybatisplus.plugins.SqlExplainInterceptor">
+    <property name="stopProceed" value="true"></property>
+</bean>
+```
+
+测试如下：
+
+```java
+@Test
+public void testDeltetAll(){
+    userMapper.delete(null);
+}
+```
+
+sql分析插件只支持mysql5.6.3以上的版本，本质就是通过sql分析命令Explain分析当前的sql语句，根据结果集中的Extra列来断定当前是否全表操作；
+
+## 7.3.性能分析插件
+
+性能分析插件用于输出每秒sql语句和其执行时间
 
 # 八、自定义全局操作
 
