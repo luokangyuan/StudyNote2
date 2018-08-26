@@ -457,9 +457,22 @@ public void deleteByEntityWrapper(){
 }
 ```
 
+## 4.5.条件查询之Condition
 
+Condition继承了Wrapper类，另外，我们不需要再new一个Condition对象，直接调用condition类的静态方法create就可以得到一个condition对象，然后使用wrapper的所有方法，简单使用如下：
 
-# 五、活动记录
+```java
+@Test
+public void testCondition(){
+    userMapper.selectPage(new Page<User>(1,2), Condition.create()
+     .between("age",45,56)
+   );
+}
+```
+
+# 五、活动记录AR
+
+Active Record(活动记录)，简称AR，是一种领域模型模式，
 
 
 
