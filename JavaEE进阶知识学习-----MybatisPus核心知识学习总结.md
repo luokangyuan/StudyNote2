@@ -743,6 +743,32 @@ sql分析插件只支持mysql5.6.3以上的版本，本质就是通过sql分析�
 </bean>
 ```
 
+测试如下：
+
+```java
+@Test
+public  void testPer(){
+    Dept dept = new Dept();
+    dept.setDeptName("开发部");
+    dept.setDeptCount("34");
+    dept.setDeptBegintime(new Date());
+    dept.insert();
+}
+```
+
+结果如下：
+
+```sql
+ Time：142 ms - ID：com.luo.mapper.DeptMapper.insert
+ Execute SQL：
+    INSERT 
+    INTO
+        tbl_dept
+        ( dept_count, dept_name, dept_beginTime ) 
+    VALUES
+        ( '34', '开发部', '2018-08-26 23:09:17.293' )]
+```
+
 
 
 # 八、自定义全局操作
