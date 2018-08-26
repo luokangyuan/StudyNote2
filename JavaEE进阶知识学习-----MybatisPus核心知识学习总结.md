@@ -392,12 +392,68 @@ public void delete(){
 public void entityWrapperTedst(){
     // 分页查询第一页，每页2条记录，年龄在41-53之间，genger为1，user_name为王五的用户
     List<User> users = userMapper.selectPage(new Page<User>(1, 2),
-                                             new EntityWrapper<User>()
-                                             .between("age", 41, 53)
-                                             .eq("gender",1)
-                                             .eq("user_name","王五")
-                                            );
-    System.out.print(users);
+         new EntityWrapper<User>()
+         .between("age", 41, 53)
+         .eq("gender",1)
+         .eq("user_name","王五")
+	);
+
+}
+```
+
+## 4.2.模糊查询和或查询
+
+```java
+@Test
+public void selectListTest(){
+    List<User> users = userMapper.selectList(new EntityWrapper<User>()
+          .eq("gender", 1)
+          .like("user_name", "三")
+          .orNew()
+          .like("email", "5")
+    );
+}
+```
+
+使用或条件查询可以使用`or()`也可以使用`orNew()`,二者的区别在于sql中的条件部分不一样，如下：
+
+`使用or()的sql语句`
+
+```sql
+SELECT id AS id,user_name AS userName,email,gender,age FROM tbl_user WHERE (gender = ? AND user_name LIKE ? OR email LIKE ?)
+```
+
+`使用orNew()的sql语句`
+
+```sql
+SELECT id AS id,user_name AS userName,email,gender,age FROM tbl_user WHERE (gender = ? AND user_name LIKE ?) OR (email LIKE ?)
+```
+
+## 4.3.修改满足条件的数据
+
+```java
+@Test
+public void updataByEntityWrapper(){
+    User user = new User();
+    user.setEmail("luokangyuan@sina,com");
+    user.setAge(24);
+    user.setUserName("四川麻酱");
+    Integer update = userMapper.update(user, new EntityWrapper<User>()
+       .eq("user_name","李四")
+       .eq("age",53)
+       );
+}
+```
+
+## 4.4.删除满足条件的数据
+
+```java
+@Test
+public void deleteByEntityWrapper(){
+    userMapper.delete(new EntityWrapper<User>()
+      .eq("user_name","王八")
+      .eq("age",56)
+    );
 }
 ```
 
