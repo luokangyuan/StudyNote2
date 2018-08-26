@@ -769,7 +769,37 @@ public  void testPer(){
         ( '34', '开发部', '2018-08-26 23:09:17.293' )]
 ```
 
+## 7.4.乐观锁插件
 
+当我们在开发中，有时需要判断，当我们更新一条数据库记录时，希望这条记录没有被别人更新，这个时候就可以使用乐观锁插件，他的原理就是，取出记录时，获取当前的version，更新的时候带上这个version，执行更新的时候`set version = yourVersion+1 where version = yourVersion`,如果version不对，则更新失败，注意的是：`@version用于注解实体字段，必须要有`；
+
+首先，注册插件
+
+```xml
+<bean class="com.baomidou.mybatisplus.plugins.OptimisticLockerInterceptor"></bean>
+```
+
+实体类添加对应属性,同时数据库表也要添加对应字段
+
+```java
+@Version
+private Integer version;
+```
+
+测试如下：
+
+```java
+@Test
+public void testVersion(){
+    Dept dept = new Dept();
+    dept.setDeptName("测试部");
+    dept.setVersion(1);
+    dept.setId(1);
+    dept.updateById();
+}
+```
+
+如果：这个时候将数据库version改为2，在执行更新就会显示更新记录数为0；
 
 # 八、自定义全局操作
 
