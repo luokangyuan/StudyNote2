@@ -472,9 +472,112 @@ public void testCondition(){
 
 # 五、活动记录AR
 
-Active Record(活动记录)，简称AR，是一种领域模型模式，
+Active Record(活动记录)，简称AR，是一种领域模型模式，特点就是一个模型类对应关系型数据库中的一个表，而模型类的一个实例对应表中的一条记录；
 
+## 5.1.开启AR模式
 
+开启AR模式的方法很简单，就是让我们的实体类继承Model类，并实现其抽象方法，指定主键即可，如下
+
+```java
+public class User extends Model<User> {
+
+    @Override
+    protected Serializable pkVal() {
+        return id;
+    }
+}
+```
+
+## 5.2.插入一条数据
+
+```java
+@Test
+public void insert(){
+    User user = new User();
+    user.setUserName("杉木");
+    user.setAge(25);
+    user.setEmail("shancnu@163.com");
+    user.setGender(1);
+    boolean rs = user.insert();
+}
+```
+
+## 5.3.修改一条数据
+
+```java
+@Test
+public void update(){
+    User user = new User();
+    user.setUserName("杉木博客");
+    user.setAge(35);
+    user.setId(10);
+    boolean rs = user.updateById();
+}
+```
+
+> 说明：和通用的CRUD中的更新方法一样，`updateAllColumnById()`会更新所有列
+
+## 5.4.查询数据
+
+```java
+@Test
+public void select(){
+    User user = new User();
+    user.setId(2);
+    // 根据ID查询一条数据
+    User user1 = user.selectById();
+    // 查询所有的数据
+    List<User> users = user.selectAll();
+    // 根据条件查询
+    List<User> usersList = user.selectList(new EntityWrapper<User>()
+           .like("user_name", "三"));
+    // 统计满足条件的数据数量
+    int gender = user.selectCount(new EntityWrapper<User>().eq("gender", 1));
+    // 统计全表数量
+    int count = user.selectCount(null);
+}
+```
+
+## 5.5.删除一条数据
+
+```java
+@Test
+public void delete(){
+    User user = new User();
+    user.setId(7);
+    boolean rs = user.deleteById();
+    System.out.print(rs);
+}
+```
+
+当然，也可以根据条件删除多条数据，这里需要注意的是：`当删除不存在的数据时候，返回的结果也是true；`
+
+```java
+// 删除不存在逻辑属于成功
+public static boolean delBool(Integer result) {
+    return null != result && result >= 0;
+}
+```
+
+## 5.6.分页查询数据
+
+在前面的CRUD中的分页查询返回的是list数据集合，但是在AR中返回的却是Page对象，如下
+
+```java
+@Test
+public void selectPage(){
+    User user = new User();
+    Page<User> userPage = user.selectPage(new Page<User>(1, 2),
+          new EntityWrapper<User>().like("user_name", "三"));
+    List<User> records = userPage.getRecords();
+}
+```
+
+## 5.7.AR总结
+
+AR提供的是一种更为快速的实现CRUD操作，本质很是调用Mybatis对应的方法，说的简单一点就是语法糖；
+
+糖虽然好吃，但是，不要管不住嘴；
 
 # 六、代码生成器
 
