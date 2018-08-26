@@ -581,9 +581,117 @@ AR提供的是一种更为快速的实现CRUD操作，本质很是调用Mybatis�
 
 # 六、代码生成器
 
+我们知道mybatis有一个代码生成器MBG，可以生成Java实体类mapper接口和映射文件，但是MybatisPlus却更加强大，可以生成service和controller，可以配置实体类是否支持AR等，[代码生成器](http://mp.baomidou.com/#/generate-code)
 
+> 说明：建议数据库表名和字段名采用驼峰命名方式，和实体来一致，可以避免在对应实体类产生的性能损耗
+
+## 6.1.导入依赖
+
+```xml
+<dependency>
+    <groupId>org.apache.velocity</groupId>
+    <artifactId>velocity-engine-core</artifactId>
+    <version>2.0</version>
+</dependency>
+```
+
+> 说明：MybatisPlus默认使用的是velocity模版引
+
+## 6.2.编写配置类
+
+```java
+@Test
+public void testMbg(){
+
+    // 1.全局配置
+    GlobalConfig globalConfig = new GlobalConfig();
+    globalConfig.setActiveRecord(true)// 是否开启AR模式
+        .setAuthor("luokangyuan") // 指定作者
+        .setOutputDir("/Users/luokangyuan/Documents/project/mybatisdemo/src/main/java")
+        .setFileOverride(true) // 指定文件覆盖
+        .setIdType(IdType.AUTO) // 设置主键自增策略
+        .setServiceImplName("%sService") // 设置生成的services接口的名字的首字母是否为I
+        .setBaseResultMap(true) // 基本的字段映射
+        .setBaseColumnList(true); // 基本的sql片段
+    // 2.配置数据源
+    DataSourceConfig dataSourceConfig = new DataSourceConfig();
+    dataSourceConfig.setDbType(DbType.MYSQL) // 设置数据库类型
+        .setDriverName("com.mysql.jdbc.Driver")
+        .setUrl("jdbc:mysql://localhost:3306/mybatis?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Hongkong")
+        .setUsername("root")
+        .setPassword("jiamei@20141107.");
+    // 3.策略配置
+    StrategyConfig strategyConfig = new StrategyConfig();
+    strategyConfig.setCapitalMode(true) //全局大写命名
+        .setDbColumnUnderline(true) // 指定表名和字段名是否使用了下划线
+        .setNaming(NamingStrategy.underline_to_camel) // 数据库字段下划线转驼峰命令策略
+        .setTablePrefix("tbl_") // 设置表前缀
+        .setInclude("tbl_dept","tbl_file"); // 设置需要生成的表
+    // 4.包名策略配置
+    PackageConfig packageConfig = new PackageConfig();
+    packageConfig.setParent("com.luo") // 设置父包
+        .setMapper("mapper")
+        .setService("service")
+        .setController("controller")
+        .setEntity("beans")
+        .setXml("mapper");
+    // 5. 开始生成代码
+    AutoGenerator autoGenerator = new AutoGenerator();
+    autoGenerator.setGlobalConfig(globalConfig)
+        .setDataSource(dataSourceConfig)
+        .setStrategy(strategyConfig)
+        .setPackageInfo(packageConfig);
+    autoGenerator.execute();
+}
+```
+
+## 6.3.生成的service代码查看
+
+```java
+@Service
+public class DeptService extends ServiceImpl<DeptMapper, Dept> implements IDeptService {
+
+}
+```
+
+DeptService继承了ServiceImpl，在ServiceImpl中就已经注入了DeptMapper，所以，我们就不需要再次注入，在ServiceImpl中也帮我们提供了常用的CRUD方法，我们可以直接使用，
+
+```java
+@Controller
+@RequestMapping("/dept")
+public class DeptController {
+    @Autowired
+    private IDeptService service;
+
+    public String select(){
+        service.selectList(null);
+        return null;
+    }
+}
+```
 
 # 七、插件扩展
+
+## 7.1.注册分页插件
+
+```xml
+<bean id="sqlSessionFactoryBean" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+    <!-- 数据源 -->
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    <!-- 别名处理 -->
+    <property name="typeAliasesPackage" value="com.luo.beans"></property>
+    <!-- 注入全局MP策略配置 -->
+    <property name="globalConfig" ref="globalConfiguration"></property>
+    <property name="plugins">
+        <list>
+            <bean class="com.baomidou.mybatisplus.plugins.PaginationInterceptor"></bean>
+        </list>
+    </property>
+</bean>
+```
+
+
 
 
 
