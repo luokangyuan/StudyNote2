@@ -735,7 +735,15 @@ sql分析插件只支持mysql5.6.3以上的版本，本质就是通过sql分析�
 
 ## 7.3.性能分析插件
 
-性能分析插件用于输出每秒sql语句和其执行时间
+性能分析插件用于输出每秒sql语句和其执行时间,首先注册插件，如下：
+
+```xml
+<bean class="com.baomidou.mybatisplus.plugins.PerformanceInterceptor">
+    <property name="format" value="true"></property>
+</bean>
+```
+
+
 
 # 八、自定义全局操作
 
