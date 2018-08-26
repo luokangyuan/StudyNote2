@@ -691,7 +691,28 @@ public class DeptController {
 </bean>
 ```
 
+`真正的分页查询`
 
+```java
+ApplicationContext ioc = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+private UserMapper userMapper = ioc.getBean("userMapper",UserMapper.class);
+
+@Test
+public void testPage(){
+    Page<User> page = new Page<User>(1,4);
+    List<User> users = userMapper.selectPage(page,null);
+    page.setRecords(users);
+    System.out.print("总记录数"+page.getTotal());
+    System.out.print("当前页码"+page.getCurrent());
+    System.out.print("总页码"+page.getPages());
+    System.out.print("每页记录数"+page.getSize());
+    System.out.print("是否有前一页"+page.hasPrevious());
+    System.out.print("是否有后一页"+page.hasNext());
+}
+```
+
+> 说明：我们可以将分页查询的数据放在page对象中，返回前端一个page对象即可
 
 
 
