@@ -870,7 +870,47 @@ public void testInject(){
 
 ## 8.2.逻辑删除
 
+所谓逻辑删除，就是不真正的删除数据的记录，而是变为无效状态，在MybatisPlus中，给我们提供logicSqlInjector
 
+**第一步：数据库添加逻辑字段**
+
+**第二步：实体类添加对应属性和注解**
+
+```java
+@TableLogic
+private Integer logicFlag;
+```
+
+**第三步：MybatisPlus全局配置中加入logicSqlInjector**
+
+```xml
+<bean id ="globalConfiguration" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+    <!--映射数据库下划线字段名到数据库实体类的驼峰命名的映射-->
+    <property name="dbColumnUnderline" value="true"></property>
+    <!-- 全局的主键策略 -->
+    <property name="idType" value="0"></property>
+    <!-- 全局的表前缀策略配置 -->
+    <property name="tablePrefix" value="tbl_"></property>
+    <!--注入自定义全局操作-->
+    <property ref="logicSqlInjector" name="sqlInjector"></property>
+    <!--注入逻辑删除全局值-->
+    <property name="logicDeleteValue" value="-1"></property>
+    <property name="logicNotDeleteValue" value="1"></property>
+</bean>
+<!--逻辑删除-->
+<bean class="com.baomidou.mybatisplus.mapper.LogicSqlInjector" id="logicSqlInjector"></bean>
+```
+
+**测试**
+
+```java
+@Test
+public void testLogin(){
+    Integer integer = userMapper.deleteById(1);
+}
+```
+
+> 说明：我们做的是删除操作，但是，执行的却是update操作，同时，`查询的时候自动添加了有效判断`
 
 
 
