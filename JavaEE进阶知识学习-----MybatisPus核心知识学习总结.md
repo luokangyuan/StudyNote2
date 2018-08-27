@@ -914,19 +914,45 @@ public void testLogin(){
 
 # 九、公共字段填充
 
+这里涉及到一个元数据处理接口`MetaObjectHandler`,元对象是Mybatis提供的一个用于更加方便，更加优雅的访问对象的属性，给对象的属性赋值的一个对象，本质上metaObject获取对象的值或者是给对象的属性赋值，都是通过反射获取到属性对应方法的Invoker；
+
 ## 9.1.使用实例
 
 **第一步：注解需要填充的字段**
 
 ```java
-@TableField(fill = FieldFill.INSERT_UPDATE)
-private Integer gender;
+@TableField(value = "user_name",fill = FieldFill.INSERT_UPDATE)
+private String userName;
 ```
 
 **第二步：自定义填充处理器**
 
 ```java
+public class MetaHandler extends MetaObjectHandler {
+    /**
+     * 插入操作：自动填充
+     * @param metaObject
+     */
+    public void insertFill(MetaObject metaObject) {
+        // 获取到需要被填充的字段值
+        Object userName = getFieldValByName("userName", metaObject);
+        if(userName == null){
+            setFieldValByName("userName","四川码酱",metaObject);
+        }
+    }
 
+    /**
+     * 更新操作：自动填充
+     * @param metaObject
+     */
+    public void updateFill(MetaObject metaObject) {
+        // 获取到需要被填充的字段值
+        Object userName = getFieldValByName("userName", metaObject);
+        if(userName == null){
+            setFieldValByName("userName","康哥哥",metaObject);
+        }
+    }
+}
 ```
 
 **第三步：注入全局配置**
@@ -952,13 +978,27 @@ private Integer gender;
 <bean class="com.luo.bandler.MetaHandler" id="metaHandler"></bean>
 ```
 
+**第四步：测试**
 
-
-
+```java
+@Test
+public void testCom(){
+    User user = new User();
+    user.setId(11);
+    user.setLogicFlag(1);
+    user.updateById();
+}
+```
 
 # 十、IEDA开发插件
 
+## 10.1.安装方法
 
+打开IDEA设置--Plugins--Browse repositories --搜索mybatisx,安装即可
+
+## 10.2.支持的功能
+
+根据mapper接口方法自动生成xml文件，接口方法定位xml,xml自动定位mapper接口；
 
 
 
