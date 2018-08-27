@@ -803,7 +803,76 @@ public void testVersion(){
 
 # 八、自定义全局操作
 
-## 8.1.自定义全局操作
+## 8.1.自定义全局实例
+
+自定义全局操作，就是将我们需要的sql在项目启动的时候就注入到全局中，操作步骤如下：
+
+* 在Mapper接口中定义我们需要注入的方法；
+* 扩展AutoSqlInjector中的inject方法，实现Mapper中我们自定义方法要注入的sql；
+* 最后，在全局配置中，配置我们自定义的注入器即可；
+
+**第一步：mapper中定义方法**
+
+```java
+public interface UserMapper extends BaseMapper<User> {
+    
+    int deleteAll();
+}
+```
+
+**第二步：重写inject方法**
+
+```java
+public class MySqlInjector  extends AutoSqlInjector {
+
+    @Override
+    public void inject(Configuration configuration, MapperBuilderAssistant builderAssistant, Class<?> mapperClass, Class<?> modelClass, TableInfo table) {
+        // 构造sql语句
+        String sql = "delete from " + table.getTableName();
+        // 构造方法名
+        String method = "deleteAll";
+        // 构造SqlSource对象
+        SqlSource sqlSource = languageDriver.createSqlSource(configuration, sql, modelClass);
+        // 构造一个删除的MapperStatement
+        this.addDeleteMappedStatement(mapperClass,method,sqlSource);
+    }
+}ß
+```
+
+**第三步：注入自定义配置**
+
+```xml
+<bean id ="globalConfiguration" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+     <!--映射数据库下划线字段名到数据库实体类的驼峰命名的映射-->
+     <property name="dbColumnUnderline" value="true"></property>
+     <!-- 全局的主键策略 -->
+     <property name="idType" value="0"></property>
+     <!-- 全局的表前缀策略配置 -->
+     <property name="tablePrefix" value="tbl_"></property>
+     <!--注入自定义全局操作-->
+     <property name="sqlInjector" ref="mySqlInjector"></property>
+</bean>
+<bean class="com.luo.injector.MySqlInjector" id="mySqlInjector"></bean>
+```
+
+**测试**
+
+```java
+ApplicationContext ioc = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+private UserMapper userMapper = ioc.getBean("userMapper",UserMapper.class);
+
+@Test
+public void testInject(){
+    int rs = userMapper.deleteAll();
+}
+```
+
+## 8.2.逻辑删除
+
+
+
+
 
 
 
