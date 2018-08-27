@@ -914,7 +914,47 @@ public void testLogin(){
 
 # 九、公共字段填充
 
-## 9.1.元数据处理器接口
+## 9.1.使用实例
+
+**第一步：注解需要填充的字段**
+
+```java
+@TableField(fill = FieldFill.INSERT_UPDATE)
+private Integer gender;
+```
+
+**第二步：自定义填充处理器**
+
+```java
+
+```
+
+**第三步：注入全局配置**
+
+```xml
+<bean id ="globalConfiguration" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+    <!--映射数据库下划线字段名到数据库实体类的驼峰命名的映射-->
+    <property name="dbColumnUnderline" value="true"></property>
+    <!-- 全局的主键策略 -->
+    <property name="idType" value="0"></property>
+    <!-- 全局的表前缀策略配置 -->
+    <property name="tablePrefix" value="tbl_"></property>
+    <!--注入自定义全局操作-->
+    <!--<property name="sqlInjector" ref="mySqlInjector"></property>-->
+    <property ref="logicSqlInjector" name="sqlInjector"></property>
+    <!--注入逻辑删除全局值-->
+    <property name="logicDeleteValue" value="-1"></property>
+    <property name="logicNotDeleteValue" value="1"></property>
+    <!--注入公共字段填充处理器-->
+    <property name="metaObjectHandler" ref="metaHandler"></property>
+</bean>
+<!--自定义公共字段填充处理器-->
+<bean class="com.luo.bandler.MetaHandler" id="metaHandler"></bean>
+```
+
+
+
+
 
 # 十、IEDA开发插件
 
