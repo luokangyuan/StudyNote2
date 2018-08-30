@@ -1,11 +1,11 @@
 ![logo](media/logo.png)
 
-# Zealot
+# Java学习笔记
 
-> 一个简单、强大的Java动态SQL和参数生成工具库
+> 坚持每天学习一点，进步一点，离梦想更近一点
 
-- 简单、动态、轻量级 (72kb)
-- 支持 Java 流式 API 和 XML文件 两种方式书写SQL
+- 简单、系统、逐渐深入的Java学习笔记
+- 扩展了前端框架、JavaScript、大数据基础知识
 
-[GitHub](https://github.com/blinkfox/zealot/)
+[GitHub](https://github.com/luokangyuan/StudyNote2/)
 [开始使用](introduction)
