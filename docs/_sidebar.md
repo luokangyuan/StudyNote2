@@ -1,3 +1,4 @@
-* [MybatisPlus学习笔记总结](mybatisPlus)
-* [SpringBoot学习笔记总结](springBoot)
+* [MybatisPlus学习笔记总结](studynote/mybatisPlus)
+* [SpringBoot学习笔记总结](studynote/springBoot)
+* [Vue学习笔记总结](studynote/vue)
 
