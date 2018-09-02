@@ -185,5 +185,36 @@ Logger logger = LoggerFactory.getLogger(getClass());
 
 在动态web项目中，我们可以将静态资源文件放在app目录下，然后访问，在SpringBoot下，我们可以使用webjars的方式来引入我们需要的静态文件，首先我们可以在`WebMvcAutoConfiguration`类中找到我们的静态资源映射规则的配置方法，如下；
 
-![carbon (1)](/Users/luokangyuan/Downloads/carbon (1).png)
+![carbon (http://image.luokangyuan.com/2018-09-02-094031.png)](/Users/luokangyuan/Downloads/carbon (1).png)
+
+从上面的代码我们看出，任何以`/webjars/**`的访问请求都会去`classpath:/META-INF/resources/webjars/`下面找资源文件，所谓的webjars就是以一种maven的方式导入前端需要的框架资源，[下载地址](https://www.webjars.org/)，使用方式很简单，示例如下：
+
+```xml
+ <dependency>
+     <groupId>org.webjars</groupId>
+     <artifactId>jquery</artifactId>
+     <version>3.3.1-1</version>
+</dependency>
+```
+
+上面说的是我们的存在webjars的静态资源文件，如果是我们自己的资源文件，存放路径为：
+
+```properties
+"classpath:/META-INF/resources/",
+"classpath:/resources/",
+"classpath:/static/", 
+"classpath:/public/"
+"/":当前项目的根路径
+```
+
+系统欢迎页面的映射配置，是在静态资源文件下的所有的index.html文件，被`/**`映射；
+
+```java
+@Bean
+public WelcomePageHandlerMapping welcomePageHandlerMapping(ApplicationContext applicationContext) {
+    return new WelcomePageHandlerMapping(new TemplateAvailabilityProviders(applicationContext), applicationContext, this.getWelcomePage(), this.mvcProperties.getStaticPathPattern());
+}
+```
+
+## 4.2.模版引擎Thymeleaf
 
