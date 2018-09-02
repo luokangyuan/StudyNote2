@@ -179,5 +179,11 @@ Logger logger = LoggerFactory.getLogger(getClass());
 
 # 四、web开发相关
 
+在SpringBoot开发中，我们需要使用什么技术，只需要在创建项目的时候选中我们需要的模块，然后在配置文件中指定少数的配置就可以运行了；
 
+## 4.1.静态资源文件映射规则
+
+在动态web项目中，我们可以将静态资源文件放在app目录下，然后访问，在SpringBoot下，我们可以使用webjars的方式来引入我们需要的静态文件，首先我们可以在`WebMvcAutoConfiguration`类中找到我们的静态资源映射规则的配置方法，如下；
+
+![carbon (1)](/Users/luokangyuan/Downloads/carbon (1).png)
 
