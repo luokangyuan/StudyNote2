@@ -1,4 +1,5 @@
-[GitHub Stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)
+[![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network)
+
 
 # 简介
 
