@@ -1,4 +1,4 @@
-[![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network)
+[![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network) [![HitCount](http://hits.dwyl.io/luokangyuan/StudyNote2.svg)](http://hits.dwyl.io/luokangyuan/StudyNote2)
 
 
 # 简介
