@@ -218,3 +218,24 @@ public WelcomePageHandlerMapping welcomePageHandlerMapping(ApplicationContext ap
 
 ## 4.2.模版引擎Thymeleaf
 
+**引入thymeleaf**
+
+```xml
+ <dependency>
+     <groupId>com.springframework.boot</groupId>
+     <artifactId>spring-boot-starter-thymeleaf</artifactId>
+ </dependency>
+```
+
+**升级thymeleaf版本**
+
+```xml
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <thymeleaf.version>3.0.2.RELEASE</thymeleaf.version>
+    <thymeleaf-layout-dialect.version>2.1.1</thymeleaf-layout-dialect.version>
+</properties>
+```
+

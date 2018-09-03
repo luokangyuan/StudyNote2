@@ -1,3 +1,5 @@
+[GitHub Stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)
+
 # 简介
 
 这里，不求盈利，只求分享与免费；
