@@ -2,9 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network) [![HitCount](http://hits.dwyl.io/luokangyuan/StudyNote2.svg)](http://hits.dwyl.io/luokangyuan/StudyNote2)  [![GitHub issues](https://img.shields.io/github/issues/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/issues) 
 
-文档地址：[文档](http://luokangyuan.tech/StudyNote2/)
-
-
+文档地址：[文档传送门](http://luokangyuan.tech/StudyNote2/)，如果你觉得不错，给个小❤️❤️支持一下呗，
 
 这里，不求盈利，只求分享与免费；
 
