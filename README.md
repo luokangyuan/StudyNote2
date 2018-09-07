@@ -2,6 +2,20 @@
 
 
 
+这里，不求盈利，只求分享与免费；
+
+这里，不隐含扭曲的价值观，而是整合并充盈正能量；
+
+这里，不为少数人服务，而是为有需要的人竭尽所能；
+
+这里，公开，透明；
+
+这里，仅仅是个人记录自己的时间痕迹的地方；
+
+这里，只为做一件事，竭尽所能；
+
+
+
 # 后端笔记目录
 
 ## [JavaEE进阶知识学习-----SpringBoot学习总结](https://github.com/luokangyuan/StudyNote2/blob/master/JavaEE%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86%E5%AD%A6%E4%B9%A0-----SpringBoot%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93.md)
