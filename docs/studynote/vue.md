@@ -989,6 +989,41 @@ export default{
 }
 ```
 
+同理，组件之间方法的通信也是如下如下所示：
+
+**1.父组件定义方法**
+
+```javascript
+methods:{
+    addComment(comment){
+        this.comments.unshift(comment)
+    }
+}
+```
+
+**2.将方法传递到子组件中,注意使用的是冒号**
+
+```html
+<Add :addComment="addComment"/>
+```
+
+**3.子组件中使用props申明**
+
+```javascript
+props: {
+    addComment: {
+        type: Function,
+        required: true
+    }
+}
+```
+
+**4.子组件直接通过this使用**
+
+```javascript
+this.addComment(comment);
+```
+
 **使用props的优点和缺点**
 
 * 使用props这种组件通信方式只适合父组件向子组件传递数据；
