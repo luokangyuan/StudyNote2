@@ -951,11 +951,50 @@ export default {
 
 在vue中组件之间的通信方式有五种，分别为`props、vue的自定义事件、消息的订阅与发布、slot和vuex`，
 
-**组件通信：props**
+**`组件通信：props`**
 
+**1.将父组件的数据传递到子组件中**
 
+```html
+<List :comments="comments"/>
+```
 
+**2.在子组件中申明props，申明的方式有三种**
 
+```javascript
+export default {
+    // 第一种：只指定名称
+    props: ['comments'],
+    components:{
+      Item
+    }
+  }
+```
+
+```javascript
+export default {
+    // 第二种：指定名称和类型
+    props: {
+      comment: Object
+    }
+  }
+```
+
+```javascript
+export default{
+    // 第三种：指定名称，类型，必要性和默认值
+    props: {
+        name:{type:String,required:true,default:'张三'}
+    }
+}
+```
+
+**使用props的优点和缺点**
+
+* 使用props这种组件通信方式只适合父组件向子组件传递数据；
+* 传递到子组件的标签属性都会称为子组件对象的属性，可以直接在组件中使用；
+* 如果需要向非直接子后代的组件传递数据需要多层逐层传递；
+* 兄弟组件之间也不能直接使用props通信，需要借助父组件才行；
 
 
 
