@@ -868,7 +868,7 @@ export default {
 <template>
   <div id="app">
     <img class="logo" src="./assets/logo.png">
-    <!-- 使用组件标签 -->
+    <!-- 3.使用组件标签 -->
     <HelloWorld/> 
   </div>
 </template>
@@ -917,6 +917,31 @@ new Vue({
 使用动态web服务器（Tomcat）:修改webpack.prod.conf.js，加入`output: {publicPath: '/xxx/' //打包文件夹的名称}`，然后重新打包，将dis文件夹的名称改为项目名称，放在tomcat的webapp目录下，访问即可；
 
 ## 2.3.组件的定义
+
+在vue中，我们知道一个vue文件包含三部分，分别为模版页面、JS模块对象和CSS样式，组件的定义就是写一个vue文件，只是这一个文件单独的完成某一项功能，例如，下拉树，下拉多选等，这就是一个组件；当我们页面需要使用组件的时候就引入相关的组件，使用方法如下：
+
+**1.引入组件**
+
+```javascript
+import HelloWorld from './components/HelloWord'
+```
+
+**2.将引入的组件映射为标签**
+
+```javascript
+export default {
+  name: 'App',
+  components: {
+    HelloWorld
+  }
+}
+```
+
+**3.使用组件标签**
+
+```html
+<HelloWorld/>
+```
 
 
 
