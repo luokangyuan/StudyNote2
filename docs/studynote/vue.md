@@ -1042,6 +1042,48 @@ this.addComment(comment);
 * `onmouseleave`：从大div进入到外部时候，触发
 *  `onmouseout`：从大div进入小div时候，触发
 
+**`组件通信：自定义事件`**
+
+官方文件中的自定义事件可以参考，[自定义事件](https://cn.vuejs.org/v2/guide/components-custom-events.html),简单的一下
+
+**1.父组件中绑定通信的函数,props使用的是冒号，这里不是了**
+
+```html
+<TodoHeader @addTodo="addTodo"/>
+```
+
+**2.子组件中也不再使用props申明了**
+
+```javascript
+this.$emit('addTodo',todo)
+```
+
+> 说明：$emit函数的参数一个是绑定的事件函数名，一个就是数据，执行这个函数需要传递的参数；
+
+当然，官方还介绍另外一种自定义事件通信，只是我觉得有些麻烦，这里也一并简单说一下
+
+**1.给需要绑定的组件中指定ref属性**
+
+```html
+<TodoHeader ref="header"/>
+```
+
+**2.因为事件是在加载的时候就因该被绑定，所以在mounted中执行异步代码**
+
+```javascript
+mounted(){
+    this.$refs.header.$on('addTodo',this.addTodo)
+}
+```
+
+**3.子组件中同样的使用方法**
+
+```javascript
+this.$emit('addTodo',todo)
+```
+
+> 说明：这种方式也只是适合直接父子组件之间传递函数，在隔代组件活着兄弟组件之间不合适；
+
 
 
 # 三、Vue请求方式vue-ajax
