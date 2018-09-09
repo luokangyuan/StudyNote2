@@ -1154,9 +1154,34 @@ PubSub.publish('deleteTodo',index)
 
 # 三、Vue请求方式vue-ajax
 
-
+在vue中，可以使用vue-ressource和axios来发送异步AJAX请求，其中vue-ressource在vue1.x中使用广泛,但在vue2.x之后官方推荐使用axios请求库
 
 ## 3.1.axios的使用
+
+**1.下载axios**
+
+```bash
+npm install axios --save
+```
+
+**2.组件中引入**
+
+```javascript
+import axios from 'axios'
+```
+
+**3.组件初始化时候调用**
+
+```javascript
+mounted(){
+    const  url = ''
+    axios.get(url).then(response => {
+        const result = response.data
+        }).catch(error => {
+        alert('请求失败')
+    })
+}
+```
 
 
 
