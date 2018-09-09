@@ -1120,6 +1120,38 @@ PubSub.publish('deleteTodo',index)
 
 > 说明：使用pubsub进行组件之间的通信，可以不关系组件之间的关系，例如兄弟组件都可以使用；
 
+**`组件通信：slot`**
+
+简单说，我们平时看的APP的顶部导航就是反复的使用，但是每一个页面的内容和样式又不一样，这个时候就可以使用slot，`父组件向子组件传递标签数据`；
+
+**1.首先在子组件中定义插头,定义了三个插头**
+
+```html
+<template>
+  <div class="todo-footer">
+    <label>
+      <slot name="checkAll"></slot>
+    </label>
+    <span>
+      <slot name="count"></slot>
+    </span>
+    <slot name="delete"></slot>
+  </div>
+</template>
+```
+
+**2.在父组件中向子组件传递标签数据**
+
+```html
+<TodoFooter>
+    <input type="checkbox" v-model="isAllCheck" slot="checkAll"/>
+    <span slot="count">已完成{{completerSize}}/ 全部{{todos.length}}</span>
+    <button class="btn btn-danger" v-show="completerSize" @click="deleteCompleteTodos" 			slot="delete">清除已完成任务</button>
+</TodoFooter>
+```
+
+> 说明：传递的标签数据是在父组件渲染的，所以子组件的计算属性都要放在父组件中，子组件不需要写；
+
 # 三、Vue请求方式vue-ajax
 
 
