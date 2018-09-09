@@ -1084,7 +1084,41 @@ this.$emit('addTodo',todo)
 
 > 说明：这种方式也只是适合直接父子组件之间传递函数，在隔代组件活着兄弟组件之间不合适；
 
+**`组件通信：pubsub消息订阅与发布`**
 
+使用pubsub.js进行消息的订阅与发布，需要我们下载和引入pubsub.js
+
+```bash
+npm install --save pubsub-js
+```
+
+这个时候，我们如果要A--B--C之间传递函数，就可以不再使用props逐层传递和声明了；
+
+和前面的对比：`绑定事件监听就是订阅消息，触发事件就是发布消息；`
+
+**1.父组件引入pubsub.js**
+
+```javascript
+import PubSub from 'pubsub-js'
+```
+
+**2.父组件中订阅消息**
+
+```javascript
+mounted(){
+    PubSub.subscribe('deleteTodo',(msg,index) => {
+        this.deleteTodo(index)
+    })
+}
+```
+
+**3.孙子组件同理引入pubsub.js,同时发布消息**
+
+```javascript
+PubSub.publish('deleteTodo',index)
+```
+
+> 说明：使用pubsub进行组件之间的通信，可以不关系组件之间的关系，例如兄弟组件都可以使用；
 
 # 三、Vue请求方式vue-ajax
 
