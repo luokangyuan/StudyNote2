@@ -1187,7 +1187,62 @@ mounted(){
 
 # 四、Vue组件库
 
+常用的vue组件库，在移动端使用`Mint UI`,其官方文档为：[MintUI](https://mint-ui.github.io/docs/#/zh-cn2),在PC端使用的是`Element`,官方文档为：[Element](http://element-cn.eleme.io/#/zh-CN/component/installation),各个UI组件的使用方法基本一样，参考官方文档就可以使用，下面简单使用一下Mint UI；
 
+## 4.1.使用Mint UI
+
+**1.下载安装Mint UI**
+
+```bash
+npm install --save mint-ui
+```
+
+**2.下载实现按需打包**
+
+```bash
+npm install --save-dev babel-plugin-component
+```
+
+**3.修改babelrc配置文件**
+
+```properties
+"plugins": ["transform-vue-jsx", "transform-runtime",["component",[
+{
+"libraryName": "mint-ui",
+"style": true
+}
+]]]
+```
+
+**4.由于是移动端，可以在index.html 中添加适配**
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,minimum-scale=1, user-scalable=no" />
+<script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script>
+<script>
+    if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function() {
+            FastClick.attach(document.body);
+        }, false);
+    }
+    if(!window.Promise) {
+        document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
+    }
+</script>
+```
+
+**5.可以在main.js中全局配置我们需要使用的组件**
+
+```javascript
+import {Button} from 'mint-ui'
+Vue.component(Button.name,Button)
+```
+
+**6.在组件中使用**
+
+```html
+<mt-button type="primary" style="width: 100%" @click="handleClick">按钮</mt-button>
+```
 
 # 五、Vue路由vue-router
 
