@@ -1246,7 +1246,7 @@ Vue.component(Button.name,Button)
 
 # 五、Vue路由vue-router
 
-
+头疼
 
 # 六、Vue状态管理vuex
 
