@@ -1246,6 +1246,10 @@ Vue.component(Button.name,Button)
 
 # 五、Vue路由vue-router
 
+## 5.1.vue-router简介
+
+
+
 
 
 # 六、Vue状态管理vuex
