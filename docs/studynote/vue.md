@@ -1248,7 +1248,7 @@ Vue.component(Button.name,Button)
 
 ## 5.1.vue-router简介
 
-
+在
 
 
 
