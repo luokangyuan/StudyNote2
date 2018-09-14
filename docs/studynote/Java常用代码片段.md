@@ -80,7 +80,25 @@ DateUtils.addSeconds(new Date(),5);
 DateUtils.addMilliseconds(new Date(),5);
 ```
 
-​       
+### 2.3.10.给年份设置
+
+```java
+ DateUtils.setYears(new Date(), 2019);
+```
+
+### 2.3.11.给月份设置
+
+```java
+DateUtils.setMonths(new Date(),0);
+```
+
+> 说明：给月份设置的时候参数为0表示设置为1月；
+
+### 2.3.12.给日设置
+
+```java
+DateUtils.setDays(new Date(),1);
+```
 
 
 
