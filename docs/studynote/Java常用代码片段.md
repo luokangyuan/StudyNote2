@@ -26,78 +26,38 @@ DateUtils.parseDate("2018-12-23 12:23:59", "yyyy-MM-dd HH:mm:ss");
 
 ## 2.3.DateUtils类简要说明
 
-### 2.3.1.判断两个Date是否是同一天
-
 ```java
+// 判断两个Date是否是同一天
 DateUtils.isSameDay(new Date(), new Date());
-```
-
-### 2.3.2.年份加减
-
-```java
+// 年份加减
 DateUtils.addYears(new Date(), -3);
-```
-
-### 2.3.3.月份加减
-
-```java
+// 月份加减
 DateUtils.addMonths(new Date(), 2);
-```
-
-### 2.3.4.日加减
-
-```java
+// 日加减
 DateUtils.addDays(new Date(),1);
-```
-
-### 2.3.5.周加减
-
-```java
+// 周加减
 DateUtils.addWeeks(new Date(),1);
-```
-
-### 2.3.6.小时加减
-
-```java
+// 小时加减
 DateUtils.addHours(new Date(),5);
-```
-
-### 2.3.7.分钟加减
-
-```java
+// 分钟加减
 DateUtils.addMinutes(new Date(),5);
-```
-
-### 2.3.8.秒加减
-
-```java
+// 秒加减
 DateUtils.addSeconds(new Date(),5);
-```
-
-### 2.3.9.毫秒加减
-
-```java
+// 毫秒加减
 DateUtils.addMilliseconds(new Date(),5);
-```
-
-### 2.3.10.给年份设置
-
-```java
- DateUtils.setYears(new Date(), 2019);
-```
-
-### 2.3.11.给月份设置
-
-```java
+// 给年份设值
+DateUtils.setYears(new Date(), 2019);
+// 给月份设值：说明：给月份设置的时候参数为0表示设置为1月；
 DateUtils.setMonths(new Date(),0);
-```
-
-> 说明：给月份设置的时候参数为0表示设置为1月；
-
-### 2.3.12.给日设置
-
-```java
+// 给日设置
 DateUtils.setDays(new Date(),1);
+// 给小时设置
+DateUtils.setHours(new Date(),13);
+// 给分钟设置
+DateUtils.setMinutes(new Date(),32);
+// 给秒和毫秒设置
+DateUtils.setSeconds(new Date(),56);
+DateUtils.setMilliseconds(new Date(),998);
 ```
 
 
