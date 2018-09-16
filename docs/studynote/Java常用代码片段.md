@@ -3,9 +3,13 @@
 ## 1.1.字符串判空
 
 ```java
-if(StringUtils.isNotBlank(str)){
-    logger.info("字符串不为空");
-}
+StringUtils.isNotBlank(str)
+```
+
+## 1.2.数组判空
+
+```java
+ArrayUtils.isNotEmpty(names);
 ```
 
 # 二、日期类型常用代码
