@@ -12,6 +12,10 @@ StringUtils.isNotBlank(str)
 ArrayUtils.isNotEmpty(names);
 ```
 
+## 1.3.集合去重
+
+@
+
 # 二、日期类型常用代码
 
 ## 2.1.Date转String
@@ -90,6 +94,19 @@ DateUtils.truncate(new Date(),Calendar.HOUR);
 DateUtils.truncate(new Date(),Calendar.MINUTE);
 //2018-09-15 00:52:11.000
 DateUtils.truncate(new Date(),Calendar.SECOND);
+// 将日期向上取整，当前时间：2018-09-16 21:26:29.917
+// 2019-01-01 00:00:00.000
+DateUtils.ceiling(new Date(),Calendar.YEAR);
+// 2018-10-01 00:00:00.000
+DateUtils.ceiling(new Date(),Calendar.MONTH);
+// 2018-09-16 22:00:00.000
+DateUtils.ceiling(new Date(),Calendar.HOUR_OF_DAY);
+// 2018-09-17 00:00:00.000
+DateUtils.ceiling(new Date(),Calendar.DAY_OF_MONTH);
+// 2018-09-16 22:00:00.000
+DateUtils.ceiling(new Date(),Calendar.HOUR);
+// 2018-09-16 21:27:00.000
+DateUtils.ceiling(new Date(),Calendar.MINUTE);
 ```
 
 
