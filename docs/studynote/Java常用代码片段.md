@@ -14,7 +14,11 @@ ArrayUtils.isNotEmpty(names);
 
 ## 1.3.集合去重
 
-@
+~~~java
+
+~~~
+
+
 
 # 二、日期类型常用代码
 
@@ -108,10 +112,6 @@ DateUtils.ceiling(new Date(),Calendar.HOUR);
 // 2018-09-16 21:27:00.000
 DateUtils.ceiling(new Date(),Calendar.MINUTE);
 ```
-
-
-
-
 
 
 
