@@ -18,8 +18,6 @@ ArrayUtils.isNotEmpty(names);
 
 ~~~
 
-
-
 # 二、日期类型常用代码
 
 ## 2.1.Date转String
@@ -112,6 +110,8 @@ DateUtils.ceiling(new Date(),Calendar.HOUR);
 // 2018-09-16 21:27:00.000
 DateUtils.ceiling(new Date(),Calendar.MINUTE);
 ```
+
+## 2.4.ArraysUtil类
 
 
 
