@@ -177,9 +177,183 @@ Logger logger = LoggerFactory.getLogger(getClass());
 
 当然你也可以在项目的配置文件中配置日志的输出格式，输出路径等信息，例如：`logging.path配置在当前项目下生成log文件，使用logging.file指定完整的文件保存路径`等等一些列都可以设置；
 
-# 四、web开发相关
+# 四、整合数据访问层
 
-发反反复复
+## 4.1.整合JDBC数据访问
+
+**pom.xml文件**
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+**application.yml文件**
+
+```yaml
+spring:
+  datasource:
+    username: root
+    password: jiamei@20141107.
+    url: jdbc:mysql://127.0.0.1:3306/springbootstydy
+    driver-class-name: com.mysql.jdbc.Driver
+```
+
+**Springboot默认使用的数据源**
+
+```properties
+class com.zaxxer.hikari.HikariDataSource
+```
+
+> 说明：整合jdbc的时候，已经给我们自动配置的JdbcTemplate，直接注入使用即可；
+
+```java
+@Autowired
+private JdbcTemplate jdbcTemplate;
+```
+
+## 4.2.整合Druid数据源
+
+**引入pom文件**
+
+```xml
+<!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.1.10</version>
+</dependency>
+```
+
+**application.yaml文件**
+
+```yaml
+spring:
+  datasource:
+    username: root
+    password: jiamei@20141107.
+    url: jdbc:mysql://127.0.0.1:3306/springbootstydy
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+```
+
+**application.yaml文件中增加数据源的其他配置**
+
+```yaml
+# 数据源其他配置
+initialSize: 5
+minIdle: 5
+maxActive: 20
+maxWait: 60000
+timeBetweenEvictionRunsMillis: 60000
+minEvictableIdleTimeMillis: 300000
+validationQuery: SELECT 1 FROM DUAL
+testWhileIdle: true
+testOnBorrow: false
+testOnReturn: false
+poolPreparedStatements: true
+#   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙  
+filters: stat
+maxPoolPreparedStatementPerConnectionSize: 20
+useGlobalDataSourceStat: true  
+connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+```
+
+**DruidConfig配置文件**
+
+```java
+@Configuration
+public class DruidConfig {
+    @ConfigurationProperties(prefix = "spring.datasource")
+    @Bean
+    public DataSource druid(){
+        return new DruidDataSource();
+    }
+    /**
+     * 配置Druid的监控
+     * @return
+     */
+    @Bean
+    public ServletRegistrationBean statViewServlet(){
+        ServletRegistrationBean bean = 
+            new ServletRegistrationBean(new StatViewServlet(),"/druid/*");
+        Map<String,String> initParams = new HashMap<>();
+        initParams.put("loginUsername","admin");
+        initParams.put("loginPassword","123");
+        initParams.put("allow","");
+        initParams.put("deny","127.183,12,34");
+        bean.setInitParameters(initParams);
+        return bean;
+    }
+    /**
+     * 配置一个web监控的filter
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean webStatFilter(){
+        FilterRegistrationBean bean = new FilterRegistrationBean();
+        bean.setFilter( new WebStatFilter());
+        Map<String,String> initParams = new HashMap<>();
+        initParams.put("exclusions","*.js,*.css,/druid/*");
+        bean.setInitParameters(initParams);
+        bean.setUrlPatterns(Arrays.asList("/*"));
+        return bean;
+    }
+}
+```
+
+## 4.3.整合Mybatis
+
+**pom.xml文件**
+
+```xml
+<dependency>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>1.3.2</version>
+</dependency>
+```
+
+**注解版的mapper接口**
+
+```java
+@Mapper
+public interface UsersMapper {
+
+    @Select("select * from users where id = #{id}")
+    public Users getUsersById(Integer id);
+
+    @Delete("delete from users where id = #{id}")
+    public int deleteUsersById(Integer id);
+
+    @Insert("insert into users (id,name,sex,age,salary) values (#{id},#{name},#{sex},#{age},#{salary})")
+    public int insertusers(Users users);
+
+    @Update("update users set id = #{id}, name = #{name}, sex = #{sex}, age = #{age}, salary = #{salary} where id = #{id}")
+    public int updateUsersById(Users users);
+}
+```
+
+> 说明：可以在启动主类上添加包扫描注解`@MapperScan(value = "com.luo.springboot.mapper")`批量扫描mapper
+
+**配置文件的Mapper**
+
+```yaml
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml
+```
 
 
 
