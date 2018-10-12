@@ -91,3 +91,4 @@ console.log($.trim(str));
 
 ## 使用jQuery核心函数
 
+好
