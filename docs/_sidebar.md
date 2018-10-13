@@ -1,4 +1,4 @@
-* [MybatisPlus学习笔记总结](../../JavaEE进阶知识学习-----MybatisPus核心知识学习总结)
+* [MybatisPlus学习笔记总结](../JavaEE进阶知识学习-----MybatisPus核心知识学习总结)
 * [SpringBoot学习笔记总结](studynote/springBoot)
 * [SpringCloud学习总结](studynote/SpringCloud学习总结)
 * [Mybatis知识总结](studynote/Mybatis知识总结)
