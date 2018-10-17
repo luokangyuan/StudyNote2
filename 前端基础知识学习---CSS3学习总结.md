@@ -1,5 +1,9 @@
 # CSS3学习笔记
 
+## CSS3思维导图总结
+
+![CSS3学习笔记](http://image.luokangyuan.com/2018-10-17-154619.png)
+
 ## 前言
 
 * css的全称是什么？——`casccading style sheets`
@@ -59,13 +63,13 @@
 
 `Html实例`
 
-```ht
+```html
 <div id="wrap">
-<div class="inner">1</div>
-<div id="first">2</div>
-<div class="inner">3</div>
-<div class="inner">4</div>
-<div class="inner">5</div>
+    <div class="inner">1</div>
+    <div id="first">2</div>
+    <div class="inner">3</div>
+    <div class="inner">4</div>
+    <div class="inner">5</div>
 </div>
 ```
 
