@@ -1,5 +1,9 @@
 # JavaScript基础部分
 
+## JavaScript基础知识脑图总结
+
+![JavaScript学习笔记](http://image.luokangyuan.com/2018-10-19-142040.png)
+
 ## JavaScript简介
 
 ### JavaScript实现
