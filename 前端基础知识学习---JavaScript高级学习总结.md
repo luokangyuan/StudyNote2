@@ -109,3 +109,4 @@ DOM事件函数；定时器函数；Ajax回调函数等；
 
 全称: Immediately-Invoked Function Expression 立即调用函数表达式，别名: 匿名函数自调用，他的作用有两点` 隐藏内部实现`和`不污染外部命名空间`；
 
+test
