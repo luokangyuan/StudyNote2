@@ -377,3 +377,32 @@ Redis 列表是简单的字符串列表，按照插入顺序排序。你可以�
 
 # 四、Redis配置文件
 
+首先，从前面我们就可以看出，redis的配置文件`redis.conf`位于redis安装包里,但是我们一般都不会修改redis本身的配置文件，而是复制一份修改。
+
+## 4.1.units单位
+
+打开`redis.conf`文件，我们就可以看见redis的units单位，如下若是
+
+```bash
+# 1k => 1000 bytes
+# 1kb => 1024 bytes
+# 1m => 1000000 bytes
+# 1mb => 1024*1024 bytes
+# 1g => 1000000000 bytes
+# 1gb => 1024*1024*1024 bytes
+```
+
+## 4.2.GENERAL通用配置
+
+* `daemonize yes`配置，默认情况下，ReIIS不作为守护进程运行。
+* `loglevel notice`：日志级别，redis有四种日志级别，分别是`debug`、`verbose`、`notice`、`warning`
+* `port 6379`：端口配置。
+* `tcp-backlog `：设置tcp的backlog，backlog其实是一个连接队列，backlog队列总和=未完成三次握手队列 + 已经完成三次握手队列。在高并发环境下你需要一个高backlog值来避免慢客户端连接问题。注意Linux内核会将这个值减小到/proc/sys/net/core/somaxconn的值，所以需要确认增大somaxconn和tcp_max_syn_backlog两个值
+  来达到想要的效果。
+* `timeout 0`：在客户端空闲N秒后关闭连接（0禁用）。
+* `tcp-keepalive `：单位为秒，如果设置为0，则不会进行Keepalive检测，建议设置成60 。
+* `syslog-enabled `：是否把日志输出到syslog中
+* `syslog-ident `：指定syslog里的日志标志
+
+
+
