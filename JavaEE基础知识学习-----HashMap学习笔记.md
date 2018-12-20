@@ -408,5 +408,3 @@ void transfer(Entry[] newTable, boolean rehash) {
 
 
 
-
-
