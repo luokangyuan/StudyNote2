@@ -402,7 +402,3 @@ void transfer(Entry[] newTable, boolean rehash) {
 
 转移的时候是逆序的。假如转移前链表顺序是1->2->3，那么转移后就会变成3->2->1。死锁问题不就是因为1->2的同时2->1造成的吗？所以，HashMap 的死锁问题就出在这个`transfer()`函数上。
 
-
-
-
-
