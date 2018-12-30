@@ -140,3 +140,4 @@ Collection select = CollectionUtils.selectRejected(list, item -> {
     return Integer.valueOf(item.toString()) > 2;
 });
 ```
+
