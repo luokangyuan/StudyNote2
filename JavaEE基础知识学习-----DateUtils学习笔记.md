@@ -80,4 +80,3 @@ long fragmentInDays = DateUtils.getFragmentInDays(new Date(), Calendar.YEAR);
 ```java
 boolean b = DateUtils.truncatedEquals(new Date(), new Date(), Calendar.YEAR);
 ```
-
