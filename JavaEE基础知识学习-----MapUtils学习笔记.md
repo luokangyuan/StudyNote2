@@ -69,3 +69,4 @@ Map map1 = MapUtils.putAll(map, user);
 ```
 
 MapUtils类的常用方法基本就是这些，后面设计的`MultiMap`、`LazyMap`、`BidiMap`会在后面的博客中仔细说明，我们在平时的开发中应该多使用开源的工具类，简洁高效我们的代码。
+
