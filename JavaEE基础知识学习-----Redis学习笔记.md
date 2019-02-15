@@ -405,4 +405,3 @@ Redis 列表是简单的字符串列表，按照插入顺序排序。你可以�
 * `syslog-ident `：指定syslog里的日志标志
 
 ## 五、Redis持久化
-
