@@ -552,4 +552,18 @@ docker search elasticsearch
  docker pull registry.docker-cn.com/library/elasticsearch
 ```
 
+## 附录四：docker安装kibana
+
+### 下载kibana镜像
+
+```bash
+docker pull kibana:latest
+```
+
+### 启动kibana
+
+```bash
+docker run --name kibana  --link ES14:elasticsearch -p 5601:5601 -d kibana
+```
+
 
