@@ -34,7 +34,92 @@ class MyThread extends Thread {
 }
 ```
 
+### 方式二：实现Runnable接口
 
+* 创建一个实现了`Runnable`接口的类。
+* 实现接口中定义的`run()`抽象方法。
+* 创建一个实现类的对象。
+* 将实现类的对象通过参数的形式传递到`Thread`的构造方法中，以此来创建`Thread`对象。
+* 通过`Thread`对象来调用`start()`方法。
+
+```java
+public class RunnableTest {
+    public static void main(String[] args) {
+        MyRunnableThread myRunnableThread = new MyRunnableThread();
+        Thread thread = new Thread(myRunnableThread);
+        thread.start();
+    }
+}
+
+class MyRunnableThread implements Runnable {
+    @Override
+    public void run() {
+        Thread.currentThread().setName("子线程");
+        for (int i = 0; i < 1000; i++) {
+            System.out.println(Thread.currentThread().getName() + ":" + i);
+        }
+    }
+}
+```
+
+### 方式三：实现Callable接口
+
+* 创建一个实现类`Callable`接口的实现类。
+* 重写`call()`方法。
+* 创建实现类的对象。
+* 将实现`callable`接口的实现类对象作为参数传递到`FutureTask`的构造函数中。
+* 创建一个`Thread`对象，并将`FutureTask`对象作为参数传递，并调用`start()`方法。
+* 如果需要获取线程的返回值，就使用`get()`方法调用。
+
+```java
+public class CallableTest {
+    public static void main(String[] args) {
+        CallableThread callableThread = new CallableThread();
+        FutureTask futureTask = new FutureTask(callableThread);
+        new Thread(futureTask).start();
+        try {
+            Object sum = futureTask.get();
+            System.out.println(sum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class CallableThread implements Callable {
+    @Override
+    public Object call() throws Exception {
+        int sum = 0;
+        for (int i = 0; i < 1000; i++) {
+            sum += i;
+        }
+        return sum;
+    }
+}
+```
+
+
+
+**对比方式二，有什么不同**
+
+* 相比`run()`方法，可以有返回值。
+* 这个方法可以抛出异常，实现`Runnable`接口的`run`方法只能`try-catch`。
+* 支持泛型的返回值。
+* 可以借助`FutureTask`类，获取返回结果等操作。
+
+
+
+**Thread类的常用方法**
+
+* `start()`：启动当前线程，并调用`run()`方法。
+* `Thread.currentThread()`：得到当前线程。
+* `Thread.currentThread().getName();`：得到当前线程名称。
+* `Thread.currentThread().setName("");`：给当前线程设置名称。
+* `yield();`：释放当前CPU执行权，也可能释放后又被自己抢到。
+* `join()`：就是在线程A中调用线程B的`join()`方法，就是线程A进入阻塞 状态，等线程B 全结束后再继续执行。
+* `sleep(2000)`：当前线程睡眠时间。也就是阻塞指定时间。
+* `isAlive()`：判断当前线程是否处于存活状态。
+* `setPriority(Thread.MAX_PRIORITY);`：设置线程的优先级，优先级高只是说优先概念执行，并不是一定比优先级低的先执行。高优先级的线程比低优先级线程抢得CPU的概率要高一点。
 
 
 
