@@ -75,10 +75,10 @@ class MyRunnableThread implements Runnable {
 public class CallableTest {
     public static void main(String[] args) {
         CallableThread callableThread = new CallableThread();
-        FutureTask futureTask = new FutureTask(callableThread);
+        FutureTask<Integer> futureTask = new FutureTask<Integer>(callableThread);
         new Thread(futureTask).start();
         try {
-            Object sum = futureTask.get();
+            Integer sum = futureTask.get();
             System.out.println(sum);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,9 +86,9 @@ public class CallableTest {
     }
 }
 
-class CallableThread implements Callable {
+class CallableThread implements Callable<Integer> {
     @Override
-    public Object call() throws Exception {
+    public Integer call() throws Exception {
         int sum = 0;
         for (int i = 0; i < 1000; i++) {
             sum += i;
@@ -98,14 +98,14 @@ class CallableThread implements Callable {
 }
 ```
 
-
-
 **对比方式二，有什么不同**
 
 * 相比`run()`方法，可以有返回值。
 * 这个方法可以抛出异常，实现`Runnable`接口的`run`方法只能`try-catch`。
 * 支持泛型的返回值。
 * 可以借助`FutureTask`类，获取返回结果等操作。
+
+### 方式四：使用线程池
 
 
 
