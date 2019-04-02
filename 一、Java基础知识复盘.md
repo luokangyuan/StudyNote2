@@ -107,7 +107,67 @@ class CallableThread implements Callable<Integer> {
 
 ### 方式四：使用线程池
 
+* 提供指定线程数量的线程池
+* 执行指定的线程操作，需要提供实现类Runnable接口或者Callable接口的实现类对象
 
+```java
+public class ThreadPoolTest {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        Future submit = executorService.submit(new MyThreadPool());
+    }
+}
+
+class MyThreadPool implements Callable {
+
+    @Override
+    public Object call() throws Exception {
+        int sum = 0;
+        for (int i = 0; i < 100; i++) {
+            System.out.println(Thread.currentThread().getName() + ":" + i);
+            sum += i;
+        }
+        return sum;
+    }
+}
+```
+
+**说明：**
+
+`ExecutorService`是真正的线程池接口，常见的子类有`ThreadPoolExcutor`。
+
+`Executors`是一个工具类，用于创建不同的线程池，如下
+
+* `Executors.newCachedThreadPool();`：创建一个可根据需要创建新线程的线程池。主要问题是线程数最大数是Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至OOM。
+* `Executors.newFixedThreadPool(10);`：创建一个可重用固定线程数的线程池。 主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至OOM。
+* `Executors.newSingleThreadExecutor();`：创建一个只有一个线程的线程池。 主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至OOM。
+* `Executors.newScheduledThreadPool(10);`：创建一个线程池，可以在定期执行。主要问题是线程数最大数是Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至OOM。
+
+尴尬的是，线程池不建议使用Executors去创建，而是通过ThreadPoolExecutor的方式。如下所示：
+
+```java
+public class ThreadPoolFactoryTest {
+    private static ThreadFactory myThreadFactory = new ThreadFactoryBuilder().setNameFormat("Mythread-pool-%d").build();
+
+    private static ThreadPoolExecutor myThreadPool = new ThreadPoolExecutor(10, 30, 10, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>(), myThreadFactory);
+
+    public static void main(String[] args) {
+        myThreadPool.execute(new MyThread2());
+    }
+}
+
+class MyThread2 implements Runnable {
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 100; i++) {
+            if (i % 2 == 0) {
+                System.out.println(Thread.currentThread().getName() + ":" + i);
+            }
+        }
+    }
+}
+```
 
 **Thread类的常用方法**
 
@@ -121,11 +181,13 @@ class CallableThread implements Callable<Integer> {
 * `isAlive()`：判断当前线程是否处于存活状态。
 * `setPriority(Thread.MAX_PRIORITY);`：设置线程的优先级，优先级高只是说优先概念执行，并不是一定比优先级低的先执行。高优先级的线程比低优先级线程抢得CPU的概率要高一点。
 
-
-
 ## 1.2.线程的生命周期
 
+线程的生命周期状态定义在`Thread.State`枚举类中，`NEW`、`RUNNABLE`、`BLOCKED`、`WAITING`和`TIMED_WAITING``TERMINATED`。简单的将一个线程的状态有：新建、就绪、运行、阻塞和死亡五种状态。
 
+**生命周期图解**
+
+![image-20190402234652085](http://image.luokangyuan.com/2019-04-02-154656.png)
 
 
 
