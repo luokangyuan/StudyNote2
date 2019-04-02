@@ -203,3 +203,33 @@ private static String toChineseNumber(int n) {
 ```
 
 **说明：**在`switch`中`break`一定不能少。
+
+### 10.避免instanceof和预想的结果不一致
+
+```java
+public static void main(String[] args) {
+    // String对象是否是Object的实例 - true,"String"是要给字符串，字符串继承了Object，当然是Object的实例。
+    boolean b1 = "String" instanceof Object;
+    // String对象是否是String类的实例 - true，一个类的对象当然是一个类的实例。
+    boolean b2 = new String() instanceof String;
+    // Object对象是否是String的实例，编译报错，Object是父类。
+    boolean b3 = new Object() instanceof String;
+    // 拆箱类型是否是装箱类型的实例，编译报错，“A”是一个Char型，是一个基本类型，instanceof只能用于对象判断。
+    boolean b4 = "A" instanceof Character;
+    // 空对象是否是String的实例 - false，instanceof的规则，左边为null，无论右边什么类型，都返回false。
+    boolean b5 = null instanceof String;
+    // 类型转换后的空对象是否是String的实例 - false，null可以说是没有类型，类型转换后还是null。
+    boolean b6 = (String) null instanceof String;
+    // Date对象是否是String的实例，编译报错，Date类和String类没有继承关系
+    boolean b7 = new Date() instanceof String;
+}
+```
+
+### 11.使用偶判断，不使用奇判断
+
+```java
+String s = n % 2 == 1 ? "奇数" : "偶数";
+String s1 = n % 2 == 0 ? "偶数" : "奇数";
+```
+
+**说明：**通常使用第二种偶数判断，使用第一种的话。`-1`也会被判断为偶数。
