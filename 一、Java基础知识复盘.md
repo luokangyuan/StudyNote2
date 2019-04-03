@@ -189,9 +189,57 @@ class MyThread2 implements Runnable {
 
 ![image-20190402234652085](http://image.luokangyuan.com/2019-04-02-154656.png)
 
-
-
 ## 1.3.线程的同步
+
+线程的同步就是为类解决线程安全问题，线程安全问题就是程序在单线程和多线程分别执行后，结果不一样。这就出现了线程不安全。
+
+### synchronized关键字
+
+使用`synchronized`关键字，同步代码块，将操作共享数据的代码放在同步代码块中，共享数据就是指多个线程共同操作的变量。同步监视器就是锁，任何一个类的对象都可以充当锁，要求多个线程共用同一把锁。语法如下：
+
+```javascript
+synchronized (同步监视器){
+
+}
+```
+
+```java
+public class ThreadState {
+    public static void main(String[] args) {
+        TicketThread ticketThread1 = new TicketThread();
+        Thread thread1 = new Thread(ticketThread1);
+        thread1.setName("窗口一");
+        thread1.start();
+        Thread thread2 = new Thread(ticketThread1);
+        thread2.setName("窗口二");
+        thread2.start();
+        Thread thread3 = new Thread(ticketThread1);
+        thread3.setName("窗口三");
+        thread3.start();
+    }
+}
+
+class TicketThread implements Runnable {
+
+    private int ticket = 100;
+
+    Object obj = new Object();
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (obj) {
+                if (ticket > 0) {
+                    System.out.println(Thread.currentThread().getName() + "：买票，票号：" + ticket);
+                    ticket--;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+}
+```
 
 
 
