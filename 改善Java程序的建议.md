@@ -1,4 +1,4 @@
-# 一、改善Java程序的151个建议
+# 一、改善Java程序的一些建议
 
 > The reasonable man adapts himself to the world: the unreasonable one persists in trying to adapt the world to himself.
 
@@ -233,3 +233,126 @@ String s1 = n % 2 == 0 ? "偶数" : "奇数";
 ```
 
 **说明：**通常使用第二种偶数判断，使用第一种的话。`-1`也会被判断为偶数。
+
+### 12.用整数型处理货币
+
+```java
+// 0.40000000000000036
+System.out.println(10.00 - 9.60);
+```
+
+**说明：**Java中的浮点数是不准确的，在处理货币上使用浮点数就会存在问题，因此使用`BigDecimal`，类来进行计算，或者使用整数，将需要计算的数放大100倍，计算后在缩小。
+
+### 13.不要让类型悄悄转换
+
+```java
+/** 光速*/
+private static final int LIGHT_SPEED = 30 * 10000 * 1000;
+
+public static void main(String[] args) {
+    long dis = LIGHT_SPEED * 60 * 8;
+    // -2028888064
+    System.out.println(dis);
+}
+```
+
+**说明：**`LIGHT_SPEED * 60 * 8`计算后是`int`类型，可能存在越界问题，虽然，我们在代码中写了转换为`Long`型，但是，在Java中是先运算后在进行类型转换的，也就是` LIGHT_SPEED * 60 * 8`计算后是`int`型，超出了长度，从头开始，所以为负值，修改为显示的定义类型。如下：
+
+```java
+/** 光速*/
+private static final long LIGHT_SPEED = 30L * 10000 * 1000;
+
+public static void main(String[] args) {
+    long dis = LIGHT_SPEED * 60 * 8;
+    System.out.println(dis);
+}
+```
+
+### 14.不要在接口中存在实现代码
+
+**说明：**虽然接口中可以存在实现代码，但是不遵循规范，接口是抽象的方法。
+
+### 15.不要复写父类的静态方法
+
+```java
+public class ClientInterface {
+    public static void main(String[] args) {
+        Base1 base1 = new Sub1();
+        // 我是子类非静态方法
+        base1.doAnyThing();
+        // 我是父类静态方法
+        base1.doSomeThing();
+    }
+
+}
+
+class Base1 {
+    public static void doSomeThing() {
+        System.out.println("我是父类静态方法");
+    }
+
+    public void doAnyThing() {
+        System.out.println("我是父类非静态方法");
+    }
+}
+
+class Sub1 extends Base1 {
+
+    public static void doSomeThing() {
+        System.out.println("我是子类静态方法");
+    }
+
+    @Override
+    public void doAnyThing() {
+        System.out.println("我是子类非静态方法");
+    }
+}
+```
+
+### 16.使用String直接赋值
+
+```java
+public static void main(String[] args) {
+    String str1 = "China";
+    String str2 = "China";
+    String str3 = new String("China");
+    String str4 = str3.intern();
+
+    System.out.println(str1 == str2); // true
+
+    System.out.println(str1 == str3); // false
+
+    System.out.println(str1 == str4); // true
+}
+```
+
+**说明：**建议使用`String str1 = "China";`这中方式对字符串赋值，而不是通过`new String("China");`这种方式，在Java中会给定义的常量存放在一个常量池中，如果池中存在就不会在重复定义，所以`str1 == str2`返回`true`。`new`出的是一个对象，不会去检查字符串常量池是否存在，所以`str1 == str3`是不同的引用，返回`false`。经过`intern()`处理后，返回`true`，是因为`intern()`会去对象常量池中检查是否存在字面上相同得引用对象。
+
+### 17.性能考虑，首选数组
+
+```java
+private static int getSumForArray(int[] array) {
+    int sum = 0;
+    for (int i = 0; i < array.length; i++) {
+        sum += array[i];
+    }
+    return sum;
+}
+
+private static int getSumForList(List<Integer> list) {
+    return list.stream().mapToInt(Integer::intValue).sum();
+}
+```
+
+### 18.asList产生的list不可修改
+
+```java
+private static void arraysTest() {
+    String[] week = {"Mon", "Tue", "Wed", "Thu"};
+    List<String> strings = Arrays.asList(week);
+    strings.add("Fri");
+}
+```
+
+**说明：**运行报错，asList产生的list不可修改
+
