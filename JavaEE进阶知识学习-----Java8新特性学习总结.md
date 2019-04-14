@@ -921,6 +921,7 @@ public class TestTransaction {
 				.forEach(System.out::println);
 	}
 	//2. 交易员都在哪些不同的城市工作过？
+	
 	@Test
 	public void test2(){
 		transactions.stream()
