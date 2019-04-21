@@ -246,8 +246,3 @@ class TicketThread implements Runnable {
 ## 1.4.线程的通信
 
 
-
-
-
-
-
