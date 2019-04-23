@@ -70,3 +70,7 @@ docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9200:9200 -p 9300:9300 --na
   * docker rm -f $(docker ps -a -q) ：一次删除多个容器。
   * docker ps -a -q | xargs docker rm ：一次删除多个容器，采用命令组合的批处理模式。
 
+
+
+
+
