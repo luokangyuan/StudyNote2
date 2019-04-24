@@ -56,10 +56,6 @@
   * -d：后台运行。
   * -p：端口映射。
 
-```shell
-docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9200:9200 -p 9300:9300 --name ES01 5acf0e8da90b
-```
-
 * docker ps：列出所有正在运行的容器
   * -a：列出所有的容器，包括运行的或者之前运行的。
 * docker start 817cf3ed90e8：启动某个容器。
@@ -69,8 +65,42 @@ docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9200:9200 -p 9300:9300 --na
 * docker rm 容器ID ：删除已经停止的容器。
   * docker rm -f $(docker ps -a -q) ：一次删除多个容器。
   * docker ps -a -q | xargs docker rm ：一次删除多个容器，采用命令组合的批处理模式。
+* docker logs -f -t --tail 容器ID ：查看容器日志
+  * -t 是加入时间戳 
+  * -f 跟随最新的日志打印 
+  * --tail 数字 显示最后多少条 
+* docker top 容器ID ：查看容器内运行的进程 
+* docker inspect 容器ID ：查看容器内部细节 
+* docker cp  容器ID:容器内路径 目的主机路径 ：从容器内拷贝文件到主机上 
 
+**启动ES示例：**
 
+```bash
+docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9200:9200 -p 9300:9300 --name ES01 5acf0e8da90b
+```
+
+### 1.4.3.启动容器的两种方式
+
+**启动交互式容器**
+
+```bash
+docker run -it 容器名
+```
+
+**启动守护式容器**
+
+```bash
+docker run -d 容器名
+```
+
+> Docker容器后台运行,就必须有一个前台进程.
+
+### 1.4.4.进入容器进行命令操作
+
+可以使用启动交互式容器的命令`docker run -it 容器名`进入容器，使用`exit`容器停止退出，或者`ctrl+P+Q`容器不停止退出，退出后使用下列命令再次进入容器进行交互。
+
+* docker attach 容器ID ：这种命令是直接进入容器并启动命令终端，不会启动新的进程。
+* docker exec -it 容器ID bashShell （脚本：例如：ls -l /tmp）,在宿主机上执行脚本得到容器内部的信息。这个命令不会打开容器的命令终端。
 
 
 
