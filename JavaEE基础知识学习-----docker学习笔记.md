@@ -102,5 +102,7 @@ docker run -d 容器名
 * docker attach 容器ID ：这种命令是直接进入容器并启动命令终端，不会启动新的进程。
 * docker exec -it 容器ID bashShell （脚本：例如：ls -l /tmp）,在宿主机上执行脚本得到容器内部的信息。这个命令不会打开容器的命令终端。
 
+## 1.5.Docker镜像
+
 
 
