@@ -206,3 +206,62 @@ CMD /bin/bash
 
 ![image-20190426215914404](http://image.luokangyuan.com/2019-04-26-135920.png)
 
+### 1.7.2.容器数据卷
+
+命名的容器挂载数据卷，其它容器通过挂载这个(父容器)实现数据共享，挂载数据卷的容器，称之为数据卷容器。
+
+如上示例，我们先启动一个父容器实例：
+
+```bash
+docker run -it --name centos1 luokangyuan/cenos
+```
+
+我们，知道执行上述命令，会自动给容器中增加两个数据卷，如果我们在启动一个子容器实例，如下
+
+```bash
+docker run -it --name centos1 --volumes-from centos1 luokangyuan/cenos
+```
+
+这个时候，父容器中的数据卷被修改都会同步到子容器中，同理，子容器中的数据也会被同步到父容器中，我们还可以再建一个子容器，实现三者的数据共享，同时，如果这个时候父容器停止了，不影响子容器的数据共享。
+
+> 结论：容器之间配置信息的传递，数据卷的生命周期一直持续到没有容器使用它为止 
+
+## 1.8.docker的常用安装
+
+### 1.8.1.安装mysql
+
+**拉取mysql镜像**
+
+![image-20190426230118015](http://image.luokangyuan.com/2019-04-26-150122.png)
+
+**启动mysql**
+
+```bash
+[root@localhost /]# docker run -p 3306:3306 --name mysql -v /luo/mysql/conf:/etc/mysql/conf.d -v /luo/mysql/logs:/logs -v /luo/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7
+```
+
+**进入docker中的mysql容器中**
+
+```bash
+[root@localhost /]# docker exec -it fbfd7ba51893 /bin/bash
+```
+
+**进入mysql**
+
+![image-20190426231259610](http://image.luokangyuan.com/2019-04-26-151304.png)
+
+**外部直接连接即可**
+
+![image-20190426231637973](http://image.luokangyuan.com/2019-04-26-151642.png)
+
+### 1.8.2.安装redis
+
+使用命令`docker pull redis`拉取最新版本，然后启动
+
+```bash
+docker run -p 6379:6379 -v /luo/myredis/data:/data -v /luo/myredis/conf/redis.conf:/usr/local/etc/redis/redis.conf -v redis:latest redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+```
+
+## 1.9.本地镜像推送到阿里云
+
+自行百度
