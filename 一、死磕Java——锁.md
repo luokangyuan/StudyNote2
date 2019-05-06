@@ -34,3 +34,50 @@
 
 ![image-20190505222957607](http://image.luokangyuan.com/2019-05-05-143004.png)
 
+`ReentrantLock`加锁的时候默认是非公平锁，
+
+```java
+Lock lock = new ReentrantLock(); // 非公平锁
+Lock lock = new ReentrantLock(true); // 公平锁
+```
+
+`ReentrantLock`构造函数源码如下：
+
+```java
+public ReentrantLock(boolean fair) {
+    sync = fair ? new FairSync() : new NonfairSync();
+}
+```
+
+使用`ReentrantLock`表明什么是可重复入锁，代码如下：
+
+```java
+Lock lock = new ReentrantLock();
+public void get() {
+    new Thread(() -> {
+        System.out.println("线程执行开始调用加锁的方法");
+        doOther();
+    }, "T1").start();
+}
+
+public void doOther() {
+    try {
+        lock.lock();
+        doAny();
+        System.out.println("doOther方法被调用");
+    } finally {
+        lock.unlock();
+    }
+}
+
+public void doAny() {
+    try {
+        lock.lock();
+        System.out.println("doAny方法被调用");
+    } finally {
+        lock.unlock();
+    }
+}
+```
+
+​	说明：当线程调用`doOther`方法的时候获取到锁的时候，执行`doOther`方法里面的同样加锁的同步方法`doAny()`时候就使用当前的锁，不需要再去获取锁，所以就可以继续执行下去。
