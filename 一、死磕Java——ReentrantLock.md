@@ -177,9 +177,162 @@ protected final boolean tryAcquire(int acquires) {
  }
 ```
 
+### 1.2.7.获取锁失败后将线程加入到同步队列中
+
+```java
+private Node addWaiter(Node mode) {
+    // 创造一个新的节点，传入的mode参数为null
+    Node node = new Node(Thread.currentThread(), mode);
+    // Try the fast path of enq; backup to full enq on failure
+    // tail是指向队列尾元素的尾指针，新节点的头指针指向队列的尾指针
+    Node pred = tail;
+    // //队列不为空
+    if (pred != null) {
+        // 新节点的头指针修改为队列的尾指针
+        node.prev = pred;
+        // 使用CAS算法，如果内存中的队列还是之前的尾指针就把新节点指向尾指针
+        if (compareAndSetTail(pred, node)) {
+            pred.next = node;
+            return node;
+        }
+    }
+    // 安全的加入同步队列
+    enq(node);
+    return node;
+}
+```
+
+### 1.2.8.将线程加入同步队列
+
+```java
+private Node enq(final Node node) {
+    for (;;) {
+        // t节点指向当前队列的最后一个节点
+        Node t = tail;
+        // 队列为空
+        if (t == null) { // Must initialize
+            // 通过CAS构造新节点
+            if (compareAndSetHead(new Node()))
+                // 尾指针指向新节点
+                tail = head;
+        } else {
+            // 队列不为空时候，将节点的头指针指向队列的尾指针
+            node.prev = t;
+            // 使用CAS算法，如果内存中的队列还是之前的尾指针就把新节点指向尾指针
+            if (compareAndSetTail(t, node)) {
+                t.next = node;
+                return t;
+            }
+        }
+    }
+}
+```
+
+**当队列为空的时候通过CAS更新头节点源码如下：**
+
+```java
+ private final boolean compareAndSetHead(Node update) {
+     return unsafe.compareAndSwapObject(this, headOffset, null, update);
+ }
+```
+
+> 说明：仅当队列中原值为null时更新成功。
+
+**当队列不为空的时候通过CAS更新尾节点源码如下：**
+
+```java
+ private final boolean compareAndSetTail(Node expect, Node update) {
+     return unsafe.compareAndSwapObject(this, tailOffset, expect, update);
+ }
+```
+
+> 说明：CAS方式更新tial指针,仅当原值为t时更新成功
+
+### 1.2.9.线程进入队列后
+
+```java
+ final boolean acquireQueued(final Node node, int arg) {
+     // 参数arg为1，节点是为获取到锁的线程节点
+     boolean failed = true;
+     try {
+         boolean interrupted = false;
+          // 进入死循环,正常情况下线程只有获得锁才能跳出循环
+         for (;;) {
+             // 获取当前节点线程的前驱节点
+             final Node p = node.predecessor();
+             // 当获取到了前驱节点为队列头节点或者尝试获取锁成功
+             if (p == head && tryAcquire(arg)) {
+                 // 设置当前线程的节点为头节点
+                 setHead(node);
+                 p.next = null; // help GC
+                 failed = false;
+                 return interrupted; // 死循环的唯一出口
+             }
+             if (shouldParkAfterFailedAcquire(p, node) && // 判断是否要阻塞当前线程
+                 parkAndCheckInterrupt()) // 阻塞当前线程
+                 interrupted = true;
+         }
+     } finally {
+         if (failed)
+             cancelAcquire(node);
+     }
+ }
+```
+
+## 1.3.ReentrantLock加锁总结
 
 
-先看一下NonfairSync类的继承图，我们可以看见一个很重要的抽象类`AbstractQueuedSynchronizer`，有关`AQS`稍后在死磕，可以说`AQS`是同步组件的基础。
 
-![image-20190508221310426](http://image.luokangyuan.com/2019-05-08-141315.png)
+## 1.4.ReentrantLock非公平解锁
+
+```java
+lock.unlock();
+```
+
+### 1.4.1.释放锁
+
+```java
+public void unlock() {
+	sync.release(1);
+}
+```
+
+```java
+public final boolean release(int arg) {
+    // 释放锁(state-1),若释放后锁可被其他线程获取(state=0),返回true
+    if (tryRelease(arg)) {
+        // 获取队列的头节点
+        Node h = head;
+        //当前队列不为空且头结点状态不为初始化状态(0)  
+        if (h != null && h.waitStatus != 0)
+            // 唤醒同步队列中被阻塞的线程
+            unparkSuccessor(h);
+        return true;
+    }
+    return false;
+}
+```
+
+### 1.4.2.尝试释放锁
+
+```java
+protected final boolean tryRelease(int releases) {
+    // 计算待更新的state值
+    int c = getState() - releases;
+    if (Thread.currentThread() != getExclusiveOwnerThread())
+        throw new IllegalMonitorStateException();
+    boolean free = false;
+    // 待更新的state值为0,说明持有锁的线程未重入,一旦释放锁其他线程将能获取
+    if (c == 0) {
+        free = true;
+        // 清除锁的持有线程标记
+        setExclusiveOwnerThread(null);
+    }
+    // 更新的state值
+    setState(c);
+    return free;
+}
+```
+
+我们可以看见一个很重要的抽象类`AbstractQueuedSynchronizer`，有关`AQS`稍后在死磕，可以说`AQS`是同步组件的基础。
 
