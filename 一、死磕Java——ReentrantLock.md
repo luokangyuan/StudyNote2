@@ -281,7 +281,7 @@ private Node enq(final Node node) {
 
 ## 1.3.ReentrantLock加锁总结
 
-
+![image-20190509211209943](http://image.luokangyuan.com/2019-05-09-131215.png)
 
 ## 1.4.ReentrantLock非公平解锁
 
