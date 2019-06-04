@@ -11,7 +11,7 @@
 ## 目录
 
 - [Java](#Java)
-    - [Java 8](#Java 8)
+    - [Java8](#Java8)
     - [集合容器](#集合容器)
     - [并发](#并发)
     - [编程规范](#编程规范)
@@ -31,7 +31,7 @@
 
 ## Java
 
-### Java 8 
+### Java8 
 
 * [Java8时间常用操作](docs/studynote/Java8时间常用操作.md)
 * [Java8新特性总结](docs/studynote/Java8新特性总结.md)
