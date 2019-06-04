@@ -42,7 +42,7 @@
 * [ArrayUtils学习笔记](docs/studynote/ArrayUtils学习笔记.md)
 * [CollectionUtils学习笔记](docs/studynote/CollectionUtils学习笔记.md)
 * [DateUtils学习笔记](docs/studynote/DateUtils学习笔记.md)
-* [Guava MultiSet学习笔记](docs/studynote/Guava MultiSet学习笔记.md)
+* [GuavaMultiSet学习笔记](docs/studynote/GuavaMultiSet学习笔记.md)
 * [Guava学习笔记](docs/studynote/Guava学习笔记.md)
 * [MapUtils学习笔记](docs/studynote/MapUtils学习笔记.md)
 * [StringUtils学习笔记](docs/studynote/StringUtils学习笔记.md)
