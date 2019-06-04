@@ -3,14 +3,14 @@
 	<img src="http://image.luokangyuan.com/method-draw-image.svg" width=""/>
 </a></p>
 
-<p align="center">
-[![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network) [![HitCount](http://hits.dwyl.io/luokangyuan/StudyNote2.svg)](http://hits.dwyl.io/luokangyuan/StudyNote2)  [![GitHub issues](https://img.shields.io/github/issues/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/issues)   [![GitHub building](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master)](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master) <a href="https://luokangyuan.github.io/StudyNote2/#/"><img src="https://img.shields.io/badge/阅读-read-brightgreen.svg" alt="阅读"></a>
+
+[![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network) [![HitCount](http://hits.dwyl.io/luokangyuan/StudyNote2.svg)](http://hits.dwyl.io/luokangyuan/StudyNote2)  [![GitHub issues](https://img.shields.io/github/issues/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/issues)   [![GitHub building](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master)](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master) <a href="https://luokangyuan.github.io/StudyNote2/#/">
 
 </p>
 
 ## 目录
 
-- [Java](#java)
+- [Java](#Java)
     - [Java 8](#Java 8)
     - [集合容器](#集合容器)
     - [并发](#并发)
