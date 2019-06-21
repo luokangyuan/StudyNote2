@@ -73,6 +73,7 @@
 ### Linux相关
 
 * [JavaEE基础知识学习-----Linux学习笔记](docs/studynote/JavaEE基础知识学习-----Linux学习笔记.md)
+* [centos7常用软件安装](docs/studynote/centos7常用安装.md)
 
 ## 数据库
 
