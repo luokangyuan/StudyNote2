@@ -3,15 +3,15 @@
 	<img src="http://image.luokangyuan.com/method-draw-image.svg" width=""/>
 </a></p>
 
-<p align="center">
-[![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network) [![HitCount](http://hits.dwyl.io/luokangyuan/StudyNote2.svg)](http://hits.dwyl.io/luokangyuan/StudyNote2)  [![GitHub issues](https://img.shields.io/github/issues/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/issues)   [![GitHub building](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master)](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master) <a href="https://luokangyuan.github.io/StudyNote2/#/"><img src="https://img.shields.io/badge/阅读-read-brightgreen.svg" alt="阅读"></a>
+
+[![GitHub stars](https://img.shields.io/github/stars/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/stargazers) [![GitHub forks](https://img.shields.io/github/forks/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/network) [![HitCount](http://hits.dwyl.io/luokangyuan/StudyNote2.svg)](http://hits.dwyl.io/luokangyuan/StudyNote2)  [![GitHub issues](https://img.shields.io/github/issues/luokangyuan/StudyNote2.svg)](https://github.com/luokangyuan/StudyNote2/issues)   [![GitHub building](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master)](https://api.travis-ci.com/luokangyuan/StudyNote2.svg?branch=master) <a href="https://luokangyuan.github.io/StudyNote2/#/">
 
 </p>
 
 ## 目录
 
-- [Java](#java)
-    - [Java 8](#Java 8)
+- [Java](#Java)
+    - [Java8](#Java8)
     - [集合容器](#集合容器)
     - [并发](#并发)
     - [编程规范](#编程规范)
@@ -31,7 +31,7 @@
 
 ## Java
 
-### Java 8 
+### Java8 
 
 * [Java8时间常用操作](docs/studynote/Java8时间常用操作.md)
 * [Java8新特性总结](docs/studynote/Java8新特性总结.md)
@@ -42,7 +42,7 @@
 * [ArrayUtils学习笔记](docs/studynote/ArrayUtils学习笔记.md)
 * [CollectionUtils学习笔记](docs/studynote/CollectionUtils学习笔记.md)
 * [DateUtils学习笔记](docs/studynote/DateUtils学习笔记.md)
-* [Guava MultiSet学习笔记](docs/studynote/Guava MultiSet学习笔记.md)
+* [GuavaMultiSet学习笔记](docs/studynote/GuavaMultiSet学习笔记.md)
 * [Guava学习笔记](docs/studynote/Guava学习笔记.md)
 * [MapUtils学习笔记](docs/studynote/MapUtils学习笔记.md)
 * [StringUtils学习笔记](docs/studynote/StringUtils学习笔记.md)
