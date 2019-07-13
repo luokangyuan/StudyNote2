@@ -28,6 +28,8 @@
     - [CSS](#CSS)
     - [JavaScript](#JavaScript)
     - [Vue](#Vue)
+- [设计模式](#设计模式)
+    - [UML](#uml)
 
 ## Java
 
@@ -125,6 +127,12 @@
 ### Vue
 
 * [Vue核心知识笔记](docs/studynote/Vue核心知识笔记.md)
+
+## 设计模式
+
+### UML
+
+* [UML类图关系介绍](docs/studynote/UML类图关系介绍.md)
 
 
 ## 待办
