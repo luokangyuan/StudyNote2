@@ -135,6 +135,7 @@
 ### UML
 
 * [UML类图关系介绍](docs/studynote/UML类图关系介绍.md)
+* [单例模式](docs/studynote/死磕设计模式—单例模式.md)
 
 
 ## 待办
@@ -144,6 +145,7 @@
 - [ ] sql书写规范
 - [ ] Spring boot + Spring Security + Oauth2.0整合
 - [ ] 数据结构和算法
+- [X] 单例模式
 
 
 
