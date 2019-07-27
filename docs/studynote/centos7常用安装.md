@@ -178,3 +178,34 @@ yum -y install docker-ce
 systemctl start docker
 ```
 
+## 1.4.Maven安装
+
+### 下载安装包
+
+[apache-maven-3.6.0-bin.tar.gz](http://mirrors.hust.edu.cn/apache/maven/maven-3/3.6.0/binaries/)
+
+### 解压
+
+```bash
+[root@localhost apache-maven-3.6.0]# tar -zxvf apache-maven-3.6.0-bin.tar.gz
+```
+
+### 配置环境变量
+
+```bash
+vim /etc/profile
+```
+
+```bash
+# maven配置
+M2_HOME=/opt/soft/apache-maven-3.6.0
+PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
+export M2_HOME PATH
+```
+
+### 配置生效
+
+```bash
+source /etc/profile
+```
+
