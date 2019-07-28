@@ -1,7 +1,7 @@
 <p align="center">
 <img width="130" align="center" src="http://image.luokangyuan.com/Java.svg"/>
 </p>
-<h1 align="center">消息队列—RocketMQ</h1>
+<h1 align="center">消息队列—RocketMQ（使用篇）</h1>
 
 
 
