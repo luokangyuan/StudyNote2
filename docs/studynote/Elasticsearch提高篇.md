@@ -37,7 +37,15 @@
 ### 元数据（标注文档信息）
 
 ```json
-
+"_index" : "user",
+"_type" : "_doc",
+"_id" : "l0D6UmwBn8Enzbv1XLz0",
+"_score" : 1.6943597,
+"_source" : {
+    "user" : "mj",
+    "sex" : "男",
+    "age" : "18"
+}
 ```
 
 * `_index`：文档所属的索引名称。
@@ -135,6 +143,15 @@
 * `Simple Analyzer`：按照非字母切分（符号被过滤），并作大写转小写处理
 * `Stop Anayzer`：停用词（`the`、`is`）切分，并作大写转小写处理
 * `Whitespace Anayzer`：空格切分，不做大写转小写处理
+* `IK`：中文分词器，需要插件安装
+* `ICU`：国际化的分词器，需要插件安装
+* `jieba`：时下流行的一个中文分词器。安装方法见附录
+
+> PS：`Elasticsearch`安装插件，`[root@34d02ff9d16c elasticsearch]#  bin/elasticsearch-plugin install  analysis-icu`
+>
+> 查看已经安装的插件：`bin/elasticsearch-plugin list`
+
+
 
 ## 附录一
 
@@ -146,6 +163,11 @@
 * `docker`安装 `Elasticsearch `插件 ：[https://www.elastic.co/cn/blog/elasticsearch-docker-plugin-management](https://www.elastic.co/cn/blog/elasticsearch-docker-plugin-management)
 * `Elasticsearch`的中文社区[https://elasticsearch.cn/](https://elasticsearch.cn/)
 * `Beats`的产品：[https://www.elastic.co/cn/downloads/beats](https://www.elastic.co/cn/downloads/beats)
+* 不错的中文分词器：[https://github.com/fxsjy/jieba](https://github.com/fxsjy/jieba)
+* 不错的英文分词器：[https://github.com/nltk/nltk](https://github.com/nltk/nltk)
+* `IK`分词器：[https://github.com/medcl/elasticsearch-analysis-ik](https://github.com/medcl/elasticsearch-analysis-ik)
+* `THULAC`分词器，清华大学自然语言处理系的分词器[https://github.com/thunlp/THULAC-Python](https://github.com/thunlp/THULAC-Python)
+* 
 
 ## 附录二
 
