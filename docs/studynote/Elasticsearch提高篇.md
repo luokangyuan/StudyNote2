@@ -16,7 +16,7 @@
 
 ## 1.2.Elastic Stack技术架构
 
-### Elastic static家族产品：
+### Elastic static家族产品
 
 ![image-20190802210856808](http://image.luokangyuan.com/2019-08-02-130901.png)
 
@@ -94,59 +94,47 @@
 
 > 小思考：由于分片数是在创建索引的时候就已经设定了，那么设置过大或者过小有什么问题吗？
 
-## 1.4.文档的CRUD
-
-```json
-// 创建一个文档，自动生成文档标识
-POST user/_doc 
-{
-  "user": "mj",
-  "sex": "男",
-  "age": "18"
-}
-// 创建一个文档，自己指定文档标识,再次创建会报错
-PUT user/_doc/123456?op_type=create
-{
-   "user": "mj01",
-  "sex": "男",
-  "age": "19"
-}
-// 查询具体的文档
-GET user/_doc/123456
-
-// 修改文档中现有的内容，先删除，在增加
-PUT user/_doc/123456
-{
-  "user": "张三丰"
-}
-// 在原有文档上增加内容
-POST user/_update/123456/
-{
-  "doc": {
-    "money": "0.01"
-  }
-}
-// 批量操作
-GET _mget
-{
-  "docs":[
-    {
-      "_index":"user",
-      "_id": "123456"
-    },
-    {
-      "_index":"user2",
-      "_id": "123456"
-    }
-    ]
-}
-```
-
-## 1.5.倒排索引
+## 1.4.倒排索引
 
 **正排索引**：就是文档`ID`到文档内容的索引，简单讲，就是根据`ID`找文档。
 
 **倒排索引**：就是根据文档内容找**文档**。
+
+**倒排索引**包含如下信息：
+
+* 单词词典：用于记录**所有文档的单词**，以及单词到倒排列表的关联关系。
+* 倒排列表：记录的是单词对应的文档集合，由倒排索引项组成，其中包含
+  * 文档ID
+  * 单词出现的次数，用于相关性的评分
+  * 单词出现的位置
+  * 偏移量，用于记录单词的开始位置和结束位置，用于单词的高亮显示
+
+举例说明什么是**正排索引**和**倒排索引**，其中**正排索引**如下：
+
+| 文档ID | 文档内容             |
+| ------ | -------------------- |
+| 1101   | Elasticsearch Study  |
+| 1102   | Elasticsearch Server |
+| 1103   | master Elasticsearch |
+
+讲上例`Elasticsearch`单词修改为**倒排索引**，如下：
+
+| 文档ID（Doc ID） | 出现次数（TF） | 位置（Position） | 偏移量（Offset） |
+| ---------------- | -------------- | ---------------- | ---------------- |
+| 1101             | 1              | 0                | <0,13>           |
+| 1102             | 1              | 0                | <0,13>           |
+| 1103             | 1              | 1                | <7,20>           |
+
+> `Elasticsearch`中的每一个字段都有自己的倒排索引，也可以指定某些字段不做索引，可以节省存储空间，缺点就是不能被搜索到。
+
+## 1.5.Analyzer分词
+
+`Analysis`：文本分析，就是将文本转换为单词（`term`或者`token`）的过程，其中`Analyzer`就是通过`Analysis`实现的，`Elasticsearch`给我们内置例很多分词器。
+
+* `Standard Analyzer`：默认的分词器，按照词切分，并作大写转小写处理
+* `Simple Analyzer`：按照非字母切分（符号被过滤），并作大写转小写处理
+* `Stop Anayzer`：停用词（`the`、`is`）切分，并作大写转小写处理
+* `Whitespace Anayzer`：空格切分，不做大写转小写处理
 
 ## 附录一
 
@@ -172,27 +160,6 @@ GET _mget
 ## 附录三
 
 ### 常用API
-
-```json
-// 使用command + / 查看相关命令的信息
-// 查看索引相关信息
-GET kibana_sample_data_logs
-
-//查看索引的文档总数
-GET kibana_sample_data_logs/_count
-
-// 查看前十条文档信息
-POST kibana_sample_data_logs/_search
-
-// 查看集群的健康状态
-GET _cluster/health
-
-// 查看节点信息
-GET _cat/nodes
-
-// 查看分片信息
-GET _cat/shards
-```
 
 ```json
 // 使用command + / 查看相关命令的信息
