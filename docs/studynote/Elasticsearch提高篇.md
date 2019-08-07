@@ -151,7 +151,240 @@
 >
 > 查看已经安装的插件：`bin/elasticsearch-plugin list`
 
+## 1.6.Search API
 
+在`ES`中，我们可以使用`URL Search`和`Request Body Search`进行相关的查询操作。
+
+### URL 查询
+
+#### 使用基本的查询
+
+```json
+GET /user/_search?q=2012&df=title&sort=year:desc&from=0&size=10
+{
+	􏲽profile􏲿: true
+}
+```
+
+* 使用`q`指定查询的字符串
+* 使用`df`指定查询的字段
+* 使用`sort`进行排序，使用`from`和`size`指定分页
+* 使用`profile`可以查询查询是如何进行查询的
+
+#### 指定所有字段的泛查询
+
+```json
+GET /user/_search?q=2012
+{
+	"profile":"true"
+}
+```
+#### 指定字段的查询
+
+```json
+
+GET /user/_search?q=title:2012&sort=year:desc&from=0&size=10&timeout=1s
+{
+	"profile":"true"
+}
+```
+
+#### Term查询
+
+```json
+GET /user/_search?q=title:Beautiful Mind
+{
+	"profile":"true"
+}
+```
+
+* 上例中的`Beautiful`和`Mind`就是两个`Term`，`Term`是查询中最小的单位。
+* `Term`查询是`OR`的关系，在上例中就是`title`字段包含`Beautiful`或者包含`Mind`都会被检索到。
+
+#### Phrase查询
+
+```json
+GET /user/_search?q=title:"Beautiful Mind"
+{
+	"profile":"true"
+}
+```
+
+* 使用**引号**表示`Phrase`查询
+* `Phrase`查询表示的不仅是`And`的关系，即`Title`字段中不仅要包含`Beautiful Mind`，而且。顺序还要一致。
+
+#### 分组查询
+
+```json
+GET /user/_search?q=title:(Beautiful Mind)
+{
+	"profile":"true"
+}
+```
+
+* 使用**中括号**表示分组查询，一般使用`Term`查询的时候都会带上分组查询。
+
+#### 布尔查询
+
+* 使用 `AND`、`OR`、`NOT`或者`||`、`&&`、`!`
+* 还可以使用`+`（表示`must`）,使用`-`（表示`must_not`）
+* 需要注意的是必须大写
+
+```json
+GET /user/_search?q=title:(Beautiful NOT Mind)
+{
+	"profile":"true"
+}
+```
+
+```json
+GET /user/_search?q=title:(Beautiful %2BMind)
+{
+	"profile":"true"
+}
+```
+
+> PS：`%2B`表示的就是`+`，上例子表示的就是`title`字段中既要包含`Beautiful`，也要包含`Mind`字段
+
+#### 范围查询
+
+```json
+GET /user/_search?q=title:beautiful AND age:[2002 TO 2018%7D
+{
+	"profile":"true"
+}
+```
+
+* 使用`[ ]`表示闭区间，使用`{ }`表示开区间，例如`age :[* TO 56]`
+* 使用算术符表示范围，例如`year :>=2019 && <=1970`
+
+> PS：`URL Search`还有很多查询方式。例如通配符查询，正则插叙，模糊匹配，相似查询，其中通配符查询不建议使用。
+
+### Request Body 查询
+
+将查询的条件参数放在`Request Body`中，调用查询接口，就是`Request Body`查询，
+
+#### 基本 的查询
+
+```json
+POST /movies,404_idx/_search?ignore_unavailable=true
+{
+  "profile": true,
+	"query": {
+		"match_all": {}
+	}
+}
+```
+
+* 使用`gnore_unavailable=true`可以避免索引`404_idx`不存在导致的报错
+* `profile`和`URL Search`查询一样，可以看到查询的执行方式
+
+#### 分页查询
+
+```json
+POST /movies/_search
+{
+  "from":10,
+  "size":20,
+  "query":{
+    "match_all": {}
+  }
+}
+```
+
+#### 排序查询
+
+```json
+POST /movies/_search
+{
+  "sort":[{"order_date":"desc"}],
+  "query":{
+    "match_all": {}
+  }
+}
+
+```
+
+#### 过滤要查询的字段
+
+```json
+POST /movies/_search
+{
+  "_source":["order_date"],
+  "query":{
+    "match_all": {}
+  }
+}
+```
+
+* 如果一个文档中的字段太多，我们不需全部字段显示，就可以使用`_source`指定字段。可以使用通配符。
+
+#### 使用脚本查询
+
+* 将`ES`中的文档字段进行一定的处理后，再根据这个新的字段进行排序，
+
+```json
+GET /movies/_search
+{
+  "script_fields": {
+    "new_field": {
+      "script": {
+        "lang": "painless",
+        "source": "doc['name'].value+'是大佬'"
+      }
+    }
+  },
+  "query": {
+    "match_all": {}
+  }
+}
+```
+
+#### Term查询
+
+```json
+POST /movies/_search
+{
+  "query": {
+    "match": {
+      "title": "last christmas"
+    }
+  }
+}
+
+POST movies/_search
+{
+  "query": {
+    "match": {
+      "title": {
+        "query": "last christmas",
+        "operator": "and"
+      }
+    }
+  }
+}
+```
+
+* 使用`match`，表示的就是`OR`的关系
+* 使用`operator`，表示查询方式
+
+#### Math_phrase查询
+
+```json
+POST movies/_search
+{
+  "query": {
+    "match_phrase": {
+      "title":{
+        "query": "one love",
+         "slop": 4
+      }
+    }
+  }
+}
+```
+
+* `slop`指定查询的字符中允许出现的字符
 
 ## 附录一
 
@@ -167,6 +400,8 @@
 * 不错的英文分词器：[https://github.com/nltk/nltk](https://github.com/nltk/nltk)
 * `IK`分词器：[https://github.com/medcl/elasticsearch-analysis-ik](https://github.com/medcl/elasticsearch-analysis-ik)
 * `THULAC`分词器，清华大学自然语言处理系的分词器[https://github.com/thunlp/THULAC-Python](https://github.com/thunlp/THULAC-Python)
+* `ES`发展史：[https://www.cnblogs.com/wangzhen3798/p/10751516.html](https://www.cnblogs.com/wangzhen3798/p/10751516.html)
+* ELK6.0部署：：[Elasticsearch+Logstash+Kibana搭建分布式日志平台](https://ken.io/note/elk-deploy-guide?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io)
 * 
 
 ## 附录二
