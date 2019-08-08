@@ -497,9 +497,9 @@ GET kibana_sample_data_flights/_search
 * `THULAC`分词器，清华大学自然语言处理系的分词器[https://github.com/thunlp/THULAC-Python](https://github.com/thunlp/THULAC-Python)
 * `ES`发展史：[https://www.cnblogs.com/wangzhen3798/p/10751516.html](https://www.cnblogs.com/wangzhen3798/p/10751516.html)
 * ELK6.0部署：：[Elasticsearch+Logstash+Kibana搭建分布式日志平台](https://ken.io/note/elk-deploy-guide?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io)
-* 
+* [ElasticSearch集群可视化工具cerebro](https://github.com/lmenezes/cerebro)
 
-## 附录三
+## 附录二
 
 ### 常用API
 
