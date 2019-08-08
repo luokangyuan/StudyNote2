@@ -105,6 +105,7 @@
 ### ElasticSearch
 
 * [ElasticSearch初级篇](docs/studynote/ElasticSearch初级篇.md)
+* [ElasticSearch提高篇](docs/studynote/ElasticSearch提高篇.md)
 
 ### Docker
 
