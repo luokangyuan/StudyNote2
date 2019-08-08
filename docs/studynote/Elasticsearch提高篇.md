@@ -1,4 +1,4 @@
-<p align="center">
+a<p align="center">
 <img width="130" align="center" src="http://image.luokangyuan.com/Elasticsearch.svg"/>
 </p>
 <h1 align="center">Elasticsearch—（提高篇）</h1>
@@ -8,6 +8,10 @@
 ## 前言
 
 `Elasticsearch`的简单入门请参考之前写的一篇文章[Elasticsearch简单入门篇](http://luokangyuan.com/elasticsearchchu-ji-pian/)，这篇简单介绍啦`Elasticsearch`的基本安装、`Docker`安装方法、基本的概念，以及如何使用`Java`代码实现对`Elasticsearch`的`CRUD`操作等入门知识。
+
+## 内容摘要
+
+![Elastic Search分享](http://image.luokangyuan.com/2019-08-08-144132.png)
 
 ## 1.1.Elastic Stack应用场景
 
@@ -419,14 +423,14 @@ POST movies/_search
 
 > PS：`Text`类型的字段默认的是`Position`，其它类型默认的是`docs`，记录的越多，占用的存储空间就越大。
 
-## 1.8.Aggrenation聚合分析
+## 1.8.Aggregation聚合分析
 
 `ElasticSearch`不仅仅是搜索强大，他的统计功能也是相当的强大的，聚合分析就是统计整个数据的一个分类数量等，例如武侯区有多少新楼盘。天府新区有多少新楼盘，通过聚合分析我们只需要写一条语句就可以得到。在加上`Kibana`的可视化分析，简直就是清晰，高效。常用的集合有以下几种：
 
-* `Bucket  Aggrenation`：满足特定条件的一些集合，使用关键字`terms`
-* `Metric  Aggrenation`：简单的数学运算，对字段进行统计分析，使用关键字`min`、`max`、`sum`、`avg`等，使用关键字`aggs`
-* `Pipeline  Aggrenation`：二次聚合
-* `Matrix Aggrenation`：对多个字段进行操作，提供一个结果矩阵
+* `Bucket  Aggregation`：满足特定条件的一些集合，使用关键字`terms`
+* `Metric  Aggregation`：简单的数学运算，对字段进行统计分析，使用关键字`min`、`max`、`sum`、`avg`等，使用关键字`aggs`
+* `Pipeline  Aggregation`：二次聚合
+* `Matrix Aggregation`：对多个字段进行操作，提供一个结果矩阵
 
 ### Bucket分析示例
 
