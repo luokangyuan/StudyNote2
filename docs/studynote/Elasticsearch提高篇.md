@@ -498,6 +498,7 @@ GET kibana_sample_data_flights/_search
 * `ES`发展史：[https://www.cnblogs.com/wangzhen3798/p/10751516.html](https://www.cnblogs.com/wangzhen3798/p/10751516.html)
 * ELK6.0部署：：[Elasticsearch+Logstash+Kibana搭建分布式日志平台](https://ken.io/note/elk-deploy-guide?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io)
 * [ElasticSearch集群可视化工具cerebro](https://github.com/lmenezes/cerebro)
+* [测试数据集下载](https://grouplens.org/datasets/)
 
 ## 附录二
 
