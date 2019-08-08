@@ -100,8 +100,6 @@
 }
 ```
 
-> 小思考：由于分片数是在创建索引的时候就已经设定了，那么设置过大或者过小有什么问题吗？
-
 ## 1.4.倒排索引
 
 **正排索引**：就是文档`ID`到文档内容的索引，简单讲，就是根据`ID`找文档。
@@ -386,6 +384,99 @@ POST movies/_search
 
 * `slop`指定查询的字符中允许出现的字符
 
+## 1.7.Dynamic Mapping
+
+`Mapping`可以简单的理解为数据库中的`Schema`定义，用于定义**索引中的字段的名称**，**定义字段的类型**，**字段的倒排索引**，**指定字段使用何种分词器**等。`Dynamic Mapping`意思就是在我们创建文档的时候，如果索引不存在，就会自动的创建索引，同时自动的创建`Mapping`，`ElasticSearch`会自动的帮我们推算出字段的类型，当然，也会存在推算不准确的时候，就需要我们手动的设置。常用的字段类型如下：
+
+* 简单类型：`Text`、`Date`、`Integer`、`Boolean`等
+* 复杂类型：对象类型和嵌套类型。
+
+我们可以使用`GET /shgx/_mapping`查询索引的`Mapping`的设置，需要注意的是以下几点：
+
+* 当我们对索引中的文档新增字段时候，希望可以更新索引的`Mapping`就可以可以设置`Dynamic:true`。
+* 对于已经有数据的字段，就不再允许修改其`Mapping`，因为`Lucene`生成的倒排索引后就不允许修改。
+
+`Dynamic Mapping`可以设置三个值，分别是：
+
+* `true`：文档可被索引，新增字段也可被索引，`Mapping`也会被更新。
+* `false`：文档可被索引，新增字段不能被索引，`Mapping`不会被更新。
+* `strict`：新增字段写入，直接报错。
+
+### 如何写Mapping
+
+第一种方式是参考官方`API`，纯手工写，也可以先创建一个临时的`Index`让`ElasticSearch`自动当我们推断出基本的`Mapping`，然后自己在改吧改吧，最后把临时索引删掉就是啦。下面列举一些常用的`Mapping`设置属性：
+
+* `index`：可以设置改字段是否需要被索引到。设置为`false`就不会生成倒排索引，节省啦磁盘开销
+* `null_value`：可以控制`NULL`是否可以被索引
+* `cope_to`：将字段值放在一个新的字段中，可以使用新的字段`search`，但这个字段不会出现在`_source`中。
+* `anaylzer`：指定字段的分词器
+* `search_anaylzer`：指定索引使用的分词器
+* `index_options`：控制倒排索引的生成结构，有四种情况
+  * `docs`：倒排索引只记录文档`ID`
+  * `freqs`：记录文档`ID`和`Term`
+  * `positions`：记录文档`ID`、`Term`和`Term Position`
+  * `offsets`：记录文档`ID`、`Term`、`Term Position`和`offsets`
+
+> PS：`Text`类型的字段默认的是`Position`，其它类型默认的是`docs`，记录的越多，占用的存储空间就越大。
+
+## 1.8.Aggrenation聚合分析
+
+`ElasticSearch`不仅仅是搜索强大，他的统计功能也是相当的强大的，聚合分析就是统计整个数据的一个分类数量等，例如武侯区有多少新楼盘。天府新区有多少新楼盘，通过聚合分析我们只需要写一条语句就可以得到。在加上`Kibana`的可视化分析，简直就是清晰，高效。常用的集合有以下几种：
+
+* `Bucket  Aggrenation`：满足特定条件的一些集合，使用关键字`terms`
+* `Metric  Aggrenation`：简单的数学运算，对字段进行统计分析，使用关键字`min`、`max`、`sum`、`avg`等，使用关键字`aggs`
+* `Pipeline  Aggrenation`：二次聚合
+* `Matrix Aggrenation`：对多个字段进行操作，提供一个结果矩阵
+
+### Bucket分析示例
+
+```json
+GET kibana_sample_data_flights/_search
+{
+	"size": 0,
+	"aggs":{
+		"flight_dest":{
+			"terms":{
+				"field":"DestCountry"
+			}
+		}
+	}
+}
+```
+
+### Metric分析示例
+
+```json
+GET kibana_sample_data_flights/_search
+{
+	"size": 0,
+	"aggs":{
+		"flight_dest":{
+			"terms":{
+				"field":"DestCountry"
+			},
+			"aggs":{
+				"avg_price":{
+					"avg":{
+						"field":"AvgTicketPrice"
+					}
+				},
+				"max_price":{
+					"max":{
+						"field":"AvgTicketPrice"
+					}
+				},
+				"min_price":{
+					"min":{
+						"field":"AvgTicketPrice"
+					}
+				}
+			}
+		}
+	}
+}
+```
+
 ## 附录一
 
 ### 相关阅读
@@ -403,16 +494,6 @@ POST movies/_search
 * `ES`发展史：[https://www.cnblogs.com/wangzhen3798/p/10751516.html](https://www.cnblogs.com/wangzhen3798/p/10751516.html)
 * ELK6.0部署：：[Elasticsearch+Logstash+Kibana搭建分布式日志平台](https://ken.io/note/elk-deploy-guide?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io)
 * 
-
-## 附录二
-
-### 分片设置
-
-分片设置过小，导致后期水平扩展增加节点无用，同时，会导致单个分片的数据量庞大，重新分配耗时。
-
-分片设置过大，导致资源浪费，影响性能。
-
-
 
 ## 附录三
 
@@ -440,6 +521,47 @@ GET _cat/shards
 
 // 创建一个文档，自动生成文档标识
 POST user/_doc 
+{
+  "user": "mj",
+  "sex": "男",
+  "age": "18"
+}
+
+POST user/_doc 
+{
+  "user": "张四丰",
+  "sex": "男",
+  "age": "18"
+}
+POST user/_doc 
+{
+  "user": "00013",
+  "sex": "男",
+  "age": "18"
+}
+
+POST user/_doc 
+{
+  "user": "1010113",
+  "sex": "男",
+  "age": "18"
+}
+
+POST user/_doc 
+{
+  "user": "mj bk",
+  "sex": "男",
+  "age": "18"
+}
+
+POST user/_doc 
+{
+  "user": "bk",
+  "sex": "男",
+  "age": "18"
+}
+
+POST user1/_doc 
 {
   "user": "mj",
   "sex": "男",
@@ -484,6 +606,395 @@ GET _mget
       "_id": "123456"
     }
     ]
+}
+
+// 指定分词器进行分词
+GET /_analyze
+{
+  "analyzer": "standard",
+  "text": "In a world gone shallow in a world gone lean"
+}
+
+// 中文分词
+POST _analyze
+{
+  "analyzer": "icu_analyzer",
+  "text": "他说的确实在理”"
+}
+
+// 查看索引上具体字段是如何进行分词的
+POST /user/_analyze
+{
+  "field": "user",
+  "text": "2 In a world gone shallow in a world gone lean"
+}
+
+GET /_analyze
+{
+  "analyzer": "simple",
+  "text": "3 In a world gone shallow in a world gone lean"
+}
+
+GET /_analyze
+{
+  "analyzer": "stop",
+  "text": "3 In a world gone shallow in a world gone lean"
+}
+
+GET /_analyze
+{
+  "analyzer": "standard",
+  "text": "3 In a world gone shallow in a world gone lean"
+}
+
+
+GET /_analyze
+{
+  "analyzer": "whitespace",
+  "text": "3 In a world gone shallow in a world gone lean"
+}
+
+GET /_analyze
+{
+  "analyzer": "english",
+  "text": "3 In a world gone shallow in a world gone lean"
+}
+
+GET /_analyze
+{
+  "analyzer": "icu_analyzer",
+  "text": "你真优秀，你说的真的确实在理"
+}
+// search ApI
+
+//查询所有索引的
+GET /_search
+
+// 查询指定索引的
+GET /user,user1/_search
+
+// 查询一use开头的索引的
+GET /use*/_search
+
+// 指定字段的查询
+GET /user/_search?q=mj&df=user
+{
+  "profile": "true"
+}
+
+// 不指定字段的查询
+GET /user/_search?q=18
+{
+  "profile": "true"
+}
+
+//使用引号就是 and操作，同时存在，并且顺序也要满足
+GET /user/_search?q=user:"mj bk"
+{
+  "profile": "true"
+}
+// 不使用引号，就是有一个既可以，泛查询
+GET /user/_search?q=user:mj bk
+{
+  "profile": "true"
+}
+
+GET /user/_search?q=user:(mj bk)
+{
+  "profile": "true"
+}
+
+GET /user/_search?q=user:(mj AND bk)
+{
+  "profile": "true"
+}
+
+GET /user/_search?q=user:(mj NOT bk)
+{
+  "profile": "true"
+}
+
+GET /user/_search?q=age:>=16
+{
+  "profile": "true"
+}
+
+GET /user/_search?q=user:m*
+{
+  "profile": "true"
+}
+
+GET /user/_mapping
+
+POST /order/_doc
+{
+  "code": "1233456",
+  "name": true,
+  "xdrq": "2018-12-21"
+}
+
+POST /shgx/_doc
+{
+  "code": "1233456",
+  "name": true,
+  "xdrq": "2018-12-21",
+  "user": {
+    "name": "zhangsan",
+    "age": 15,
+    "money":6666.66
+  }
+}
+
+GET /order/_mapping
+
+GET /shgx/_mapping
+
+POST /shgx/_search
+{
+  "query": {
+    "match": {
+      "code": "1233456"
+    }
+  }
+}
+
+// 修改dynamic
+PUT /shgx/_mapping
+{
+  "dynamic":false
+}
+// 在新增一个新字段
+PUT /shgx/_doc/sYY4cWwBRbhInhDMFIoA
+{
+  "address":"sichuansheng"
+}
+
+// 在检索新加入的字段
+POST /shgx/_search
+{
+  "query": {
+    "match": {
+      "address": "sichuansheng"
+    }
+  }
+}
+
+
+// mapping
+
+PUT shgx
+{
+  "mappings": {
+    "_doc":{
+      "dynamic":"false"
+    }
+  }
+}
+
+#设置 index 为 false
+DELETE users
+PUT users
+{
+    "mappings" : {
+      "properties" : {
+        "firstName" : {
+          "type" : "text"
+        },
+        "lastName" : {
+          "type" : "text"
+        },
+        "mobile" : {
+          "type" : "text",
+          "index": false
+        }
+      }
+    }
+}
+
+PUT users/_doc/1
+{
+  "firstName":"zhan",
+  "lastName": "san",
+  "mobile": "12345678"
+}
+
+POST /users/_search
+{
+  "query": {
+    "match": {
+      "mobile":"12345678"
+    }
+  }
+}
+
+
+
+
+#设定Null_value
+
+DELETE users
+PUT users
+{
+    "mappings" : {
+      "properties" : {
+        "firstName" : {
+          "type" : "text"
+        },
+        "lastName" : {
+          "type" : "text"
+        },
+        "mobile" : {
+          "type" : "keyword",
+          "null_value": "NULL"
+        }
+
+      }
+    }
+}
+
+// null设置
+PUT users/_doc/1
+{
+  "firstName":"Ruan",
+  "lastName": "Yiming",
+  "mobile": null
+}
+
+
+PUT users/_doc/2
+{
+  "firstName":"Ruan2",
+  "lastName": "Yiming2"
+
+}
+
+GET users/_search
+{
+  "query": {
+    "match": {
+      "mobile":"NULL"
+    }
+  }
+
+}
+
+
+
+#设置 Copy to
+
+PUT users
+{
+  "mappings": {
+    "properties": {
+      "firstName":{
+        "type": "text",
+        "copy_to": "fullName"
+      },
+      "lastName":{
+        "type": "text",
+        "copy_to": "fullName"
+      },
+      "bm": {
+        "type": "text",
+        "copy_to": "fullName"
+      }
+    }
+  }
+}
+
+
+PUT users/_doc/2
+{
+  "firstName":"zhan",
+  "lastName": "san",
+  "bm":"zs"
+}
+
+GET users/_search?q=fullName:(zhan san zs)
+
+POST users/_search
+{
+  "query": {
+    "match": {
+       "fullName":{
+        "query": "Ruan Yiming",
+        "operator": "and"
+      }
+    }
+  }
+}
+
+#按照目的地进行分桶统计
+GET kibana_sample_data_flights/_search
+{
+	"size": 0,
+	"aggs":{
+		"flight_dest":{
+			"terms":{
+				"field":"DestCountry"
+			}
+		}
+	}
+}
+
+
+#查看航班目的地的统计信息，增加平均，最高最低价格
+GET kibana_sample_data_flights/_search
+{
+	"size": 0,
+	"aggs":{
+		"flight_dest":{
+			"terms":{
+				"field":"DestCountry"
+			},
+			"aggs":{
+				"avg_price":{
+					"avg":{
+						"field":"AvgTicketPrice"
+					}
+				},
+				"max_price":{
+					"max":{
+						"field":"AvgTicketPrice"
+					}
+				},
+				"min_price":{
+					"min":{
+						"field":"AvgTicketPrice"
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+#价格统计信息+天气信息
+GET kibana_sample_data_flights/_search
+{
+	"size": 0,
+	"aggs":{
+		"flight_dest":{
+			"terms":{
+				"field":"DestCountry"
+			},
+			"aggs":{
+				"stats_price":{
+					"stats":{
+						"field":"AvgTicketPrice"
+					}
+				},
+				"wather":{
+				  "terms": {
+				    "field": "DestWeather",
+				    "size": 5
+				  }
+				}
+
+			}
+		}
+	}
 }
 ```
 
